@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx 
+       	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       	http://www.springframework.org/schema/aop 
+       	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- 使用spring注解 - 注册管理bean -->
+	<context:annotation-config/>
+	<!-- spring注解搜寻范围 -->
+	<context:component-scan base-package="*"/>
+
+
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/flower?useUnicode=true&amp;characterEncoding=utf-8" />
+		<property name="user" value="root" />
+		<property name="password" value="111111" />
+
+        <property name="initialPoolSize" value="3"></property><!-- 初始化连接数 -->			
+        <property name="minPoolSize" value="2"></property><!-- 最小连接数 -->			
+        <property name="maxPoolSize" value="10"></property><!-- 连接池中保留的最大连接数 Default: 15  -->
+		<property name="maxIdleTime" value="28000"></property><!-- 连接的过期时间(秒)(<mysql 28800) Default: 0  -->
+
+        <!-- <property name="idleConnectionTestPeriod" value="3600"></property>检查连接池里的空闲连接(秒)(<mysql 28800) Default: 0 -->
+		
+	</bean>
+
+
+	<!-- 配置hibernate - sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list><!-- 实体类配置 -->
+				<value>com.hand.model.Customer</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!-- 数据库方言 -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<!-- 打印sql语句 -->
+				<prop key="hibernate.show_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- 配置hibernate事务管理器 -->
+  	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+  	</bean>
+
+	<!-- 使用注解-注册事务管理类或方法 -->
+	<tx:annotation-driven/>
+
+
+
+</beans> 
