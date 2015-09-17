@@ -36,11 +36,6 @@
 	        dataType: "json",
 	        data : {"pageNow":pageNow},
 	        timeout: 5000,
-	        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
-                alert(textStatus);
-            },
 	        success: function(priceList){
 	        	var nextpage ;
 	            var lastpage ;
@@ -74,12 +69,7 @@
 					+"<button onclick='getPriceListPage("+nextpage+")' class='btn btn-default'>>></button>";
 	    		$("#pageBody").append(_tbody);
 	    		$("#pageFooter").append(_tfooter);
-	        },
-	        complete: function(XMLHttpRequest, textStatus, errorThrown){
-	        	/* alert("1"+XMLHttpRequest.status);
-                alert("2"+XMLHttpRequest.readyState);
-                alert("3"+textStatus); */
-	       }
+	        }
 	    });
 	}
 	getPriceListPage(1);
@@ -242,13 +232,16 @@
 							        <div class="form-group">
 							            <div class="col-sm-offset-3 col-sm-3">
 							                <button type="button" class="btn">
-							                   	查询/修改
+							                   	查询/编辑
+							                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							                <button type="button" class="btn" onclick="selectCustomerCode()">
+							                  	 新增
 							                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							                <button type="submit" class="btn">
-							                  	 新增
+							                  	 保存
 							                </button>
 							            </div>
-							            <div class="col-sm-offset-3 col-sm-3">
+							            <div class="col-sm-offset-2 col-sm-3">
 							                <button type="submit" class="btn">
 							                   	导出Excel
 							                </button>
@@ -325,58 +318,29 @@
 		</div>
 	</div>
 
-	<div class="modal fade myModal2" id="model6" tabindex="-1"
-		role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<Strong>进入编辑</Strong>
-				</div>
-				<div class="modal-body">
-					<form action="CustomerAction!update.action">
-						<div class="form-group">
-							<input type="hidden" name="customer.customerId" id="dd" />
-							<div class="row form-group">
-								<div class="row">
-									<div class="col-md-2" style="margin-left: 120px">firstname</div>
-									<input class="col-md-4" type="text" name="customer.firstName">
-								</div>
-							</div>
-							<div class="row form-group">
-								<div class="row">
-									<div class="col-md-2" style="margin-left: 120px">lastname</div>
-									<input class="col-md-4" type="text" name="customer.lastName">
-								</div>
-							</div>
-
-							<div class="row form-group">
-								<div class="row">
-									<div class="col-md-2" style="margin-left: 120px">email</div>
-									<input class="col-md-4" type="text" name="customer.email">
-								</div>
-							</div>
-
-							<div class="row form-group">
-								<div class="row">
-									<div class="col-md-2" style="margin-left: 120px">address</div>
-
-									<select name="address_id" style="width: 310px; heigth: 120"
-										class="selectpicker" data-style="btn-inverse" id="sl">
-									</select>
-								</div>
-
-								<div class="row form-group">
-									<div class="row col-md-2">
-										<input type="submit" class="btn btn-success "
-											style="margin-left: 530px; margin-top: 20px" value="提交">
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+	<!-- modal for save -->
+	<div class="modal fade" id="savePriceList" tabindex="-1" role="dialog" aria-labelledby="savePriceListLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                	<button class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	                <h3 class="modal-title" id="savePriceListConfigLabel">选择客户</h3>
+	            </div>
+                <div class="modal-body">
+	                <div class="form-group">
+	                    <select class="form-control" id="saveCustomerCode" name="customersInfo.customerCode">
+	                    	
+	                    </select>
+	                </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="showPriceListColumn()">下一步</button>
+                    <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

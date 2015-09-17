@@ -47,4 +47,11 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao {
 		}
 		return customerIds;
 	}
+
+	public List<CustomersInfo> queryCustomerCodes() {
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from CustomersInfo");
+		List<CustomersInfo> customersInfos = query.list();
+		return customersInfos;
+	}
 }

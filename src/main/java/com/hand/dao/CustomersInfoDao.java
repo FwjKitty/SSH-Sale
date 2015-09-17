@@ -7,4 +7,5 @@ import com.hand.model.CustomersInfo;
 public interface CustomersInfoDao {
 
 	List<Integer> queryIdByCodeAndTypeAndName(CustomersInfo customersInfo);
+	List<CustomersInfo> queryCustomerCodes();
 }

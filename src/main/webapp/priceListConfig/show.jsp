@@ -15,6 +15,7 @@
 	<script src="<%=request.getContextPath() %>/js/jquery-2.1.1.min.js"></script>
 	<script src="<%=request.getContextPath() %>/js/jquery.cookie.js"></script>
 	<script src="<%=request.getContextPath() %>/js/bootstrap.min.js"></script>
+	<script src="<%=request.getContextPath() %>/js/priceListConfig.js"></script>
 <style type="text/css">
 @font-face {
 	font-family: 'Glyphicons Halflings';
@@ -28,129 +29,7 @@
 }
 </style>
 <script type="text/javascript">
-	function getPriceListConfigPage(pageNow) {
-		$("#msg").text("");
-	    $.ajax({
-	        type: "post",
-	        url: "<%=request.getContextPath() %>/priceListConfig_getPageResult.action",
-	        dataType: "json",
-	        data : {"pageNow":pageNow},
-	        timeout: 5000,
-	        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
-                alert(textStatus);
-            },
-	        success: function(priceListConfigs){
-	        	var nextpage ;
-	            var lastpage ;
-	            var finalpage="${fn:substringBefore((count-count%10)/10+1, '.')}";
-	            if(pageNow==1){
-	            	lastpage=1;
-	            }else lastpage=pageNow-1;
-	            if(finalpage==pageNow){
-	            	nextpage=pageNow;
-	            }else nextpage=pageNow+1;
-	        	$("#pageBody").text("");
-	        	$("#pageFooter").text("");
-	    		var _tbody = "";
-	    		var _tfooter = "";
-	    		//遍历json数组
-	    		$.each(priceListConfigs,function(n, priceListConfig){
-	    			var i = 0;
-	    			if(pageNow > 1){
-	    				i = (n+1)*(pageNow-1)*10+1;
-	    			}else{
-	    				i = n+1;
-	    			}
-                	_tbody +="<tr><td style='background-color:#b0c4de;'>"+i+"</td>"
-                		+"<td style='background-color:#f8f8ff;'>"+priceListConfig.priceListCol+"</td>"
-                		+"<td><input type='text' name='priceListConfig.displayName' value='"+priceListConfig.displayName+"'  style='width:100%;'/></td>"
-                		+"<td><input type='text' name='priceListConfig.excelCol' value='"+priceListConfig.excelCol+"' style='width:100%;'/></td>";
-                	if(priceListConfig.activity == "是"){
-                		_tbody +="<td style='background-color:#fffff0;'><input type='checkbox' value='是' name='activity' checked/></td>";
-                	}else{
-                		_tbody +="<td style='background-color:#fffff0;'><input type='checkbox' value='是' name='activity'/></td></tr>";
-                	}
-	    		});
-	    		_tfooter = "<button onclick='getPriceListConfigPage("+lastpage+")' class='btn btn-default'><<</button>"
-					+"<button onclick='getPriceListConfigPage(1)' class='btn btn-default'>first</button>"
-					+"<button onclick='getPriceListConfigPage("+finalpage+")' class='btn btn-default'>last</button>"
-					+"<button onclick='getPriceListConfigPage("+nextpage+")' class='btn btn-default'>>></button>";
-	    		$("#pageBody").append(_tbody);
-	    		$("#pageFooter").append(_tfooter);
-	        },
-	        complete: function(XMLHttpRequest, textStatus, errorThrown){
-	        	/* alert("1"+XMLHttpRequest.status);
-                alert("2"+XMLHttpRequest.readyState);
-                alert("3"+textStatus); */
-	       }
-	    });
-	}
 	getPriceListConfigPage(1);
-	function searchPriceListConfig(pageNow) {
-		$("#msg").text("");
-		var form = document.getElementById("searchForm");
-	    $.ajax({
-	        type: "post",
-	        url: "<%=request.getContextPath() %>/priceListConfig_search.action",
-	        dataType: "json",
-	        data : {"customersInfo.customerCode":form[0].value,"customersInfo.customerType":form[1].value,
-	        		"customersInfo.customerName":form[2].value,"priceListConfig.activity":form[3].value,
-	        		"priceListConfig.excelCol":form[4].value,"priceListConfig.displayName":form[5].value,
-	        		"pageNow":pageNow},
-	        timeout: 5000,
-	        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
-                alert(textStatus);
-            },
-	        success: function(priceListConfigs){
-	        	var nextpage ;
-	            var lastpage ;
-	            var finalpage="${fn:substringBefore((count-count%10)/10+1, '.')}";
-	            if(pageNow==1){
-	            	lastpage=1;
-	            }else lastpage=pageNow-1;
-	            if(finalpage==pageNow){
-	            	nextpage=pageNow;
-	            }else nextpage=pageNow+1;
-	        	$("#pageBody").text("");
-	        	$("#pageFooter").text("");
-	    		var _tbody = "";
-	    		var _tfooter = "";
-	    		//遍历json数组
-	    		$.each(priceListConfigs,function(n, priceListConfig){
-	    			var i = 0;
-	    			if(pageNow > 1){
-	    				i = (n+1)*(pageNow-1)*10+1;
-	    			}else{
-	    				i = n+1;
-	    			}
-                	_tbody +="<tr><td style='background-color:#b0c4de;'>"+i+"</td>"
-                		+"<td style='background-color:#f8f8ff;'>"+priceListConfig.priceListCol+"</td>"
-                		+"<td><input type='text' name='priceListConfig.displayName' value='"+priceListConfig.displayName+"'  style='width:100%;'/></td>"
-                		+"<td><input type='text' name='priceListConfig.excelCol' value='"+priceListConfig.excelCol+"' style='width:100%;'/></td>";
-                	if(priceListConfig.activity == "是"){
-                		_tbody +="<td style='background-color:#fffff0;'><input type='checkbox' value='是' name='activity' checked/></td>";
-                	}else{
-                		_tbody +="<td style='background-color:#fffff0;'><input type='checkbox' value='是' name='activity'/></td></tr>";
-                	}
-	    		});
-	    		_tfooter = "<button onclick='searchPriceListConfig("+lastpage+")' class='btn btn-default'><<</button>"
-					+"<button onclick='searchPriceListConfig(1)' class='btn btn-default'>first</button>"
-					+"<button onclick='searchPriceListConfig("+finalpage+")' class='btn btn-default'>last</button>"
-					+"<button onclick='searchPriceListConfig("+nextpage+")' class='btn btn-default'>>></button>";
-	    		$("#pageBody").append(_tbody);
-	    		$("#pageFooter").append(_tfooter);
-	        },
-	        complete: function(XMLHttpRequest, textStatus, errorThrown){
-	        	/* alert("1"+XMLHttpRequest.status);
-                alert("2"+XMLHttpRequest.readyState);
-                alert("3"+textStatus); */
-	       }
-	    });
-	}
 </script>
 </head>
 <body>
@@ -275,8 +154,8 @@
 					<div class="panel-body" style="margin-left: 0px; padding: 0px">
 						<div class="panel">
 							<div class="panel-heading">
-								<div class="col-sm-10">
-								<form class="form-horizontal" role="form" id="searchForm" action="<%=request.getContextPath() %>/priceListConfig_save.action" method="post">
+								<div class="col-sm-10"><%-- action="<%=request.getContextPath() %>/priceListConfig_save.action" --%>
+								<form class="form-horizontal" role="form" id="searchForm" method="post">
 									<div class="form-group">
 							            <label class="col-sm-3 control-label">客户简称</label>
 							            <div class="col-sm-3">
@@ -321,7 +200,7 @@
 							                </button>
 							            </div>
 							            <div class="col-sm-offset-3 col-sm-2">
-							                <button class="btn" data-toggle="modal" data-target="#savePriceListConfig">
+							                <button class="btn" type="button" onclick="showSelectCustomerCode()">
 							                   	新增配置
 							                </button>
 							            </div>
@@ -331,7 +210,7 @@
 							</div>
 							<div class="col-sm-12"><hr style="border:3px solid #780000;"></div>
 							<div class="panel-body form">
-								<table class="table table-striped table-bordered table-hover well" style="text-align:center;">
+								<table class="table table-bordered well" style="text-align:center;cellspacing:0;cellpadding:0;">
 									<thead style="background-color:#1e90ff">
 										<tr>
 											<th>序号</th>
@@ -394,29 +273,25 @@
 	</div>
 
 	<!-- modal for save -->
-	<div class="modal fade" id="savePriceListConfig" tabindex="-1" role="dialog" aria-labelledby="savPriceListConfigLabel" aria-hidden="true">
+	<div class="modal fade" id="savePriceListConfig" tabindex="-1" role="dialog" aria-labelledby="savePriceListConfigLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="savPriceListConfigLabel">选择客户</h4>
+                <div class="modal-header">
+                	<button class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	                <h3 class="modal-title" id="savePriceListConfigLabel">选择客户</h3>
+	            </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">客户简称</label>
-                            <input type="text" class="form-control" id="recipient-name" placeholder="CustomerCode"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-pw" class="control-label">客户类型</label>
-                            <input type="text" class="form-control" id="recipient-pw" placeholder="Type"/>
-                        </div>
-                    </form>
+	                <div class="form-group">
+	                    <select class="form-control" id="saveCustomerCode" name="customersInfo.customerCode">
+	                    	
+	                    </select>
+	                </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary">登录</button>
-                    <button class="btn btn-default">注册</button>
-                    <button class="btn btn-danger" data-dismiss="modal">close</button>
+                    <button class="btn btn-primary" onclick="showPriceListColumn()">下一步</button>
+                    <button class="btn btn-danger" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>

@@ -41,4 +41,7 @@ public class PriceListConfigServiceImpl implements PriceListConfigService {
 	public int save(PriceListConfig priceListConfig) {
 		return priceListConfigDao.save(priceListConfig);
 	}
+	public List<CustomersInfo> getCustomerCodes() {
+		return customersInfoDao.queryCustomerCodes();
+	}
 }
