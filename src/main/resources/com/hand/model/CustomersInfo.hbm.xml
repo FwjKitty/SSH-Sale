@@ -31,6 +31,19 @@
         <property name="corporation" type="java.lang.String">
             <column name="corporation" length="10" />
         </property>
+        
+        <set name="payment" inverse="true">
+            <key>
+                <column name="customer_id" not-null="true" />
+            </key>
+            <one-to-many class="com.hand.model.Payment" />
+        </set>
+        <set name="contactors" inverse="true">
+            <key>
+                <column name="customer_id" not-null="true" />
+            </key>
+            <one-to-many class="com.hand.model.Contactors" />
+        </set>
         <set name="priceListConfigs" inverse="true">
             <key>
                 <column name="customer_id" not-null="true" />

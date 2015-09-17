@@ -14,4 +14,12 @@
 			<result name="success" type="redirectAction">priceList_show.action</result>
 		</action>
 	</package>
+	<package extends="struts-default" name="CustomerPackage">
+		<action name="CustomerListAction" class="com.hand.action.CustomerListAction">
+			<result name="success">/customerlist.jsp</result>
+		</action>
+		<action name="CustomerAddAction" class="com.hand.action.CustomeraddAction">
+			<result name="success">/customerlist.jsp</result>
+		</action>
+	</package>
 </struts>
