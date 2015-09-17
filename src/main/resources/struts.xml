@@ -14,4 +14,37 @@
 			<result name="success" type="redirectAction">priceList_show.action</result>
 		</action>
 	</package>
+	<package name="CustomerPackage" extends="struts-default"  >
+		
+		 <!--  <interceptors>  
+               定义一个名为authority的拦截器  
+               <interceptor  
+                   class="com.hand.filter.UserInterceptor"  
+                   name="userInterceptor"/>  
+               定义一个包含权限检查的拦截器栈  
+               <interceptor-stack name="mydefault">  
+                   配置内建默认拦截器  
+                   <interceptor-ref name="defaultStack"/>  
+                   配置自定义的拦截器  
+                   <interceptor-ref name="userInterceptor"/>  
+               </interceptor-stack>  
+           </interceptors>  
+             
+           <default-interceptor-ref name="mydefault" />  
+           定义全局Result  
+           <global-results>  
+               <result name="error">/login.jsp</result>  
+           </global-results>  
+		 -->
+		<action name="*Action" class="com.hand.action.{1}Action" method="{*}" >
+			<result name="success">/discount/showNormalDiscount.jsp</result>
+			<result name="error">/discount/showNormalDiscount.jsp</result>
+			<result name="input">/discount/showNormalDiscount.jsp</result>
+			<result name="out">/login.jsp</result>
+		</action>
+		
+		
+		
+	</package>
+
 </struts>
