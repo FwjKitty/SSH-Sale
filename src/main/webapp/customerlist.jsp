@@ -42,47 +42,45 @@ tr,td{
 		document.temp.action = "CustomerAddAction.action";  
 		document.temp.submit();
 	}
+	
 
 	function getCustomer(curPage1) {
+		t1=document.getElementById("text1").value;
+		document.getElementById("text1");
+		document.getElementById("text2");
+		document.getElementById("text3");
+		document.getElementById("text4");
+		document.getElementById("text5");
+		document.getElementById("text6"); 
 		
-		
-		var urlGet ="<%=request.getContextPath()%>/NormalDiscountAction!showPage.action?curPage=" + curPage1;
+		var urlGet ="<%=request.getContextPath()%>/CustomerListAction?"+t1;
 		//$("#customer").html("");
 
-		$
-				.getJSON(
-						urlGet,
-						function(data) {
-							var row = "<tr><td>操作</td><td>删除</td><td>first_name</td><td>last_name</td><td>email</td><td>customer_id</td><td>address</td><td>last_update</td></tr>";
+		$.getJSON(
+			urlGet,
+			function(data) {
+				var row = "<tr><td>序号</td><td>客户名称</td><td>所属TEAM</td><td>业务经理</td><td>业务助理</td><td>状态</td><td>详细信息</td><td>客户助理</td></tr>";
+				$.each(
+					data,
+					function(entryIndex, entry) {//遍历JSON
+	
+						row += "<tr><td></td><td>"
+								+ entry.CN
+								+"</td><td>"
+								+ entry.CD
+								+ "</td><td>"
+								+ entry.Coun
+								+ "</td><td>"
+								+ entry.BM
+								+ "</td><td>"
+								+ entry.BA
+								+ "</td><td>"
+								+ entry.Sta
+								+ "</td><td></tr>"
+					});
+				$("#table1").html(row);
 
-							$
-									.each(
-											data,
-											function(entryIndex, entry) {//遍历JSON
-
-												row += "<tr><td><button type='button' class='btn btn-default' onclick='mod(this)' id="
-														+ entry.normalId
-														+ "><a>编辑</a></button><td><a class='btn btn-info'  href='CustomerAction!remove.action?customerId="
-														+ entry.normalId
-														+ "'>删除</a><td>"
-														+ entry.discountName
-														+ "</td><td>"
-														+ entry.type
-														+ "</td><td>"
-														+ entry.discountBase
-														+ "</td><td>"
-														+ entry.baseQty
-														+ "</td><td>"
-														+ entry.discountRate
-														+ "</td><td>"
-														+ entry.activity
-														+ "</td></tr>";
-
-											});
-
-							$("#customer").html(row);
-
-						});
+			});
 
 	}
 
@@ -91,7 +89,7 @@ tr,td{
 		//makePrePage(10);
 		getCustomer(1);
 			}
-		getFirstPage();
+	
 	
 	
 	function mod(even) {
@@ -325,34 +323,34 @@ tr,td{
 		<div class="col-md-10">			
 	
 				<div class="row">
-					<form class="form-horizontal" role="form"  action="" name="temp" method="post">
+					<form  id="form1" class="form-horizontal" role="form"  action=""  method="post">
 									<div class="form-group">
 							            <label class="col-sm-2 control-label">客户名称</label>
 							            <div class="col-sm-2">
-							                <input type="text" name="customersInfo.customerName" class="form-control" placeholder="CustomerName" />
+							                <input  id="text1" type="text" name="customerName" class="form-control" placeholder="CustomerName" />
 							            </div>
 							            <label class="col-sm-2 control-label">类型</label>
 							            <div class="col-sm-2">
-							                <input type="text" name="customersInfo.type" class="form-control" placeholder="Type" />
+							                <input  id="text2" type="text" name="type" class="form-control" placeholder="Type" />
 							            </div>
-							             <label class="col-sm-2 control-label">集团公司</label>
+							             <label  id="test3" class="col-sm-2 control-label">集团公司</label>
 							            <div class="col-sm-2">
-							                <input type="text" name="customersInfo.groupCompany" class="form-control" placeholder="GroupCompany" />
+							                <input id="text3" type="text" name="groupCompany" class="form-control" placeholder="GroupCompany" />
 							            </div>
 							           
 							        </div>
 							    		<div class="form-group">
 							            <label class="col-sm-2 control-label">客户简称</label>
 							            <div class="col-sm-2">
-							                <input type="text" name="customerCode" class="form-control" placeholder="CustomerCode" />
+							                <input id="text4" type="text" name="customerCode" class="form-control" placeholder="CustomerCode" />
 							            </div>
 							            <label class="col-sm-2 control-label">状态</label>
 							            <div class="col-sm-2">
-							                <input type="text" name="customersInfo.status" class="form-control" placeholder="Status" />
+							                <input type="text" name="status" class="form-control" placeholder="Status" />
 							            </div>
 							             <label class="col-sm-2 control-label">总公司</label>
 							            <div class="col-sm-2">
-							                <input type="text" name="customersInfo.corporation" class="form-control" placeholder="Corporation" />
+							                <input type="text" name="corporation" class="form-control" placeholder="Corporation" />
 							            </div>
 							           
 							        </div>
@@ -360,7 +358,7 @@ tr,td{
 							        <div class="form-group">
 							            <div class="col-sm-offset-3 col-sm-3">
 							            
-							                 <button id="button1" type="submit" class="btn"  onclick="return select()">
+							                 <button id="button1" type="button"  class="btn"  onclick="return getCustomer(1)">
 							                   	查询
 							                </button>
 							                
@@ -379,36 +377,9 @@ tr,td{
 
 				
 					<div class="col-md-12" >
-						<table class="table table-stripeed table-bordered table-hover">
-							<thead>
-								<tr>
-									<th>序号</th>
-									<th>客户名称</th>
-									<th>客户代码</th>
-									<th>所属TEAM</th>
-									<th>业务经理</th>
-									<th>业务助理</th>
-									<th>状态</th>
-									<th>详细信息</th>
-									<th>客户确认</th>
-								</tr>	
-							</thead>
-							<tbody>
-								<tr>
-									<s:iterator value="#request.customers" id="customer" status="i">
-										<th><s:property value="#i.index+1"/></th>
-    									<th><s:property value="#customer.customerName"/></th>
-    									<th><s:property value="#customer.customerCode"/></th>
-    									<th><s:property value="#customer.country"/></th>
-    									<th><s:property value="#customer.businessManager"/></th>
-    									<th><s:property value="#customer.businessAssistant"/></th>
-    									<th><s:property value="#customer.status"/></th>
-    									<th><s:a herf="customerDetail.action?customerId=%{customersInfo.customerId}"><button>查看</button></s:a>
-    									<s:a herf="updatecustomer.action?customerId=%{customersInfo.customerId}"><button>编辑</button></s:a></th> 
-    									<th><s:a herf="confirm.action?customerId=%{customersInfo.customerId}"><button>确认</button></s:a></th> 		
-    								</s:iterator>
-								</tr>
-							</tbody>
+						<table class="table table-stripeed table-bordered table-hover" id="table1">
+							
+							
 						</table>
 			</div>
 				

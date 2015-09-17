@@ -16,11 +16,11 @@ import com.hand.model.Address;
 
 import com.hand.model.CustomersInfo;
 
-import com.hand.service.CustomerService;
+import com.hand.service.CustomersInfoService;
 
 @Service
 @Transactional
-public class CustomerServiceImpl implements CustomerService {
+public class CustomersInfoServiceImpl implements CustomersInfoService {
 
 	@Resource
 	private CustomersInfoDao customersInfoDao;
@@ -71,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public void add(CustomersInfo customer) {
-		// TODO Auto-generated method stub
+		customersInfoDao.add(customer);
 		
 	}
 

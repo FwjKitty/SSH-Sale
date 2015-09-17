@@ -54,30 +54,35 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 	public List<CustomersInfo> findAllcustomers(String customerCode, String type, String customerName,String status,String groupCompany,String corporation){
 		List<CustomersInfo> customers = new ArrayList<CustomersInfo>();
 		Session session =sessionFactory.getCurrentSession();
+		//List <Object> ao=new ArrayList<Object>();
 		//StringBuilder hql = new StringBuilder("select customer_name,customer_code,country,status,business_manager,business_assistant from Customers_Info,address,organization where Customers_Info.address_id=address.address_id and Customers_Info.organization_id=organization.organization_id ");
-		StringBuilder hql=new StringBuilder("from CustomersInfo where 1=1 ");
+
+
+		//StringBuilder hql=new StringBuilder("from CustomersInfo,Address,Organization where 1=1 ");
+		
+		StringBuilder hql=new StringBuilder("from CustomersInfo where 1=1");
 		List<String> params = new ArrayList<String>();
-		if(customerCode != null){
+		if(customerCode != null && !customerCode.trim().equals("")){
 			hql.append(" and customer_code like ?");
 			params.add(customerCode);
 		}
-		if(type != null){
+		if(type != null && !type.trim().equals("")){
 			hql.append(" and type like ?");
 			params.add(type);
 		}
-		if(customerName != null){
+		if(customerName != null && !customerName.trim().equals("")){
 			hql.append(" and customer_name like ?");
 			params.add(customerName);
 		}
-		if(status !=null){
+		if(status != null && !status.trim().equals("")){
 			hql.append(" and status like ?");
 			params.add(status);
 		}
-		if(groupCompany !=null){
+		if(groupCompany !=null && !groupCompany.trim().equals("")){
 			hql.append(" and group_Company like ?");
 			params.add(groupCompany);
 		}
-		if(corporation !=null){
+		if(corporation !=null && !corporation.trim().equals("")){
 			hql.append(" and corporation like ?");
 			params.add(corporation);
 		}
@@ -85,6 +90,7 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 			Query query = session.createQuery(hql.toString());
 			for(int i=0; i<params.size(); i++){
 				query.setParameter(i, "%"+params.get(i)+"%");
+				//System.out.println(params.get(i));
 			}
 	/*		System.out.println(query.list());
 			List list = query.list();
@@ -93,12 +99,16 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 				 customers.add((CustomersInfo) i.next());
 				 System.out.println("customerinfo表查询成功");
 			 }*/
+		
+			//System.out.println("a:"+list.get(0).getAddress().getAddressLine1());
+			//String country = list.get(0).getAddress().getCountry();
 			customers=query.list();
+			//address_id=query.list().get(0).getaddress_id;
 			 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(customers);
+		System.out.println("customers"+customers);
 		System.out.println("customerinfo表查询成功");
 		return customers;
 		
@@ -122,8 +132,12 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 	}
 
 	public void add(CustomersInfo customer) {
-		// TODO Auto-generated method stub
-		
+		Session session =sessionFactory.getCurrentSession();
+		try {
+			session.save(customer);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void delete(CustomersInfo customer) {

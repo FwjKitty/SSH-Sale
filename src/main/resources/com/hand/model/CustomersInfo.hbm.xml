@@ -32,7 +32,7 @@
             <column name="corporation" length="10" />
         </property>
         
-        <set name="payment" inverse="true">
+        <set name="payments" inverse="true">
             <key>
                 <column name="customer_id" not-null="true" />
             </key>

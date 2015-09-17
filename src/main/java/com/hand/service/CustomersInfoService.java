@@ -7,7 +7,7 @@ import com.hand.model.Address;
 import com.hand.model.CustomersInfo;
 
 
-public interface CustomerService {
+public interface CustomersInfoService {
 	
 	public CustomersInfo getCustomer(int customerId);
 	

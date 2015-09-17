@@ -19,6 +19,8 @@ public class CustomersInfo implements java.io.Serializable {
 	private String type;
 	private String groupCompany;
 	private String corporation;
+	private Set payments = new HashSet(0);
+	private Set contactors = new HashSet(0);
 	private Set priceListConfigs = new HashSet(0);
 	private Set priceLists = new HashSet(0);
 	private Set specialDiscounts = new HashSet(0);
@@ -120,6 +122,22 @@ public class CustomersInfo implements java.io.Serializable {
 
 	public void setCorporation(String corporation) {
 		this.corporation = corporation;
+	}
+
+	public Set getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set payments) {
+		this.payments = payments;
+	}
+
+	public Set getContactors() {
+		return contactors;
+	}
+
+	public void setContactors(Set contactors) {
+		this.contactors = contactors;
 	}
 
 	public Set getPriceListConfigs() {
