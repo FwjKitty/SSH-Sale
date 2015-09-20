@@ -16,5 +16,9 @@ public interface PriceListConfigDao {
 			int pageSize,int pageNow);
 	List<PriceListConfig> queryByCustomerIdAndActivityAndExcelColAndDisplayName(
 			List<Integer> customerIds,PriceListConfig priceListConfig,int pageSize,int pageNow);
+	List<PriceListConfig> queryByCustomerId(
+			List<Integer> customerIds,int pageSize,int pageNow);
+	List<PriceListConfig> queryByCustomerIdAndActivity(List<Integer> customerIds);
+	List<PriceListConfig> queryByCustomerIdAndActivity(int customerId);
 	int save(PriceListConfig priceListConfig);
 }

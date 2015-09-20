@@ -15,7 +15,6 @@
 	<script src="<%=request.getContextPath() %>/js/jquery-2.1.1.min.js"></script>
 	<script src="<%=request.getContextPath() %>/js/jquery.cookie.js"></script>
 	<script src="<%=request.getContextPath() %>/js/bootstrap.min.js"></script>
-	<script src="<%=request.getContextPath() %>/js/jquery-form.js"></script>
 	<script src="<%=request.getContextPath() %>/js/priceList.js"></script>
 <style type="text/css">
 @font-face {
@@ -186,10 +185,10 @@
 							                </button>
 							            </div>
 							            <div class="col-sm-offset-1 col-sm-3">
-							                <button type="submit" class="btn" id="exportPriceList">
+							                <button type="submit" class="btn">
 							                   	导出Excel
 							                </button>
-							                <button type="button" class="btn" onclick="showImportPriceList()">
+							                <button type="submit" class="btn" onclick="showImportPriceList()">
 							                   	导入Excel
 							                </button>
 							            </div>
@@ -198,24 +197,45 @@
 								</div>
 							</div>
 							<div class="col-sm-12"><hr style="border:3px solid #780000;"></div>
-							<div class="panel-body" id="priceListPanel">
-								<table class="table table-striped table-bordered table-hover well" style="text-align:center;">
-									<thead style="background-color:#1e90ff" id="pageHead">
-										
+							<div class="panel-body">
+								<div class='form-group'>
+						            <label class='col-sm-3 control-label'>导入文件</label>
+						            <div class='col-sm-3'>
+						                <input type='file' name='priceListFile' class='form-control'/>
+						            </div>
+						        </div>
+						        <div class='form-group'>
+							    	<div class='col-sm-2'>
+							        	<button type='button' class='btn' onclick='searchPriceList()'>
+							            	选择
+							            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							            <button type='button' class='btn' onclick='showSelectCustomerCode()'>
+											导入
+							            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							            <button type='button' class='btn'>
+							             	确认
+							            </button>
+							        </div>
+							    </div>
+						        <div class='col-sm-12'><hr style='border:3px solid #780000;'></div>
+						        <table class='table table-striped table-bordered table-hover well' style='text-align:center;'>
+									<thead style='background-color:#1e90ff;' id='pageHead'>
 									</thead>
-									<tbody id="pageBody">
+									<tbody id='pageBody'>
 									</tbody>
-									<%-- <tfoot class="">
-										<tr>
-											<td colspan="5">
-											<div class="pull-left">${msg}</div>
-											<div class="pull-right" id="pageFooter">
-											</div>
-											</td>
-										</tr>
-									</tfoot> --%>
 								</table>
 							</div>
+							<div class="panel-footer" style="text-align: center; height: 50px">
+								<div class="main_page" style="margin-top:-20px"  >
+									<nav>
+									<ul class="pagination pagination-sm" id="main_page">
+										
+									</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer well" style="height: 120px"></div>
 					</div>
 				</div>
 			</div>

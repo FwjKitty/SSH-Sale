@@ -11,7 +11,7 @@ public interface PriceListConfigService {
 	List<PriceListConfig> getPriceListConfigs();
 	int getCount();
 	List<PriceListConfig> searchPriceListConfig(CustomersInfo customersInfo,
-			PriceListConfig priceListConfig,int pageSize,int pageRow);
+			PriceListConfig priceListConfig,int pageSize,int pageNow);
 	int save(PriceListConfig priceListConfig);
 	List<CustomersInfo> getCustomerCodes();
 }

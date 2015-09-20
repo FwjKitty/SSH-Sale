@@ -33,6 +33,9 @@ public class PriceListConfigServiceImpl implements PriceListConfigService {
 	public List<PriceListConfig> searchPriceListConfig(CustomersInfo customersInfo, PriceListConfig priceListConfig,int pageSize,int pageNow) {
 		List<Integer> customerIds = customersInfoDao.queryIdByCodeAndTypeAndName(customersInfo);
 		if(customerIds.size() > 0){
+			if(priceListConfig == null){
+				return priceListConfigDao.queryByCustomerId(customerIds, pageSize, pageNow);
+			}
 			return priceListConfigDao.queryByCustomerIdAndActivityAndExcelColAndDisplayName(customerIds, priceListConfig,pageSize,pageNow);
 		}else{
 			return priceListConfigDao.queryByActivityAndExcelColAndDisplayName(priceListConfig,pageSize,pageNow);

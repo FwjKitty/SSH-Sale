@@ -1,3 +1,7 @@
+/**
+ * 分页显示全部
+ * @param pageNow
+ */
 function getPriceListConfigPage(pageNow) {
 	$("#msg").text("");
     $.ajax({
@@ -48,6 +52,10 @@ function getPriceListConfigPage(pageNow) {
     });
 }
 
+/**
+ * 分页查询
+ * @param pageNow
+ */
 function searchPriceListConfig(pageNow) {
 	$("#msg").text("");
 	var form = document.getElementById("searchForm");
@@ -102,6 +110,9 @@ function searchPriceListConfig(pageNow) {
     });
 }
 
+/**
+ * 新增配置时选择客户简称
+ */
 function showSelectCustomerCode(){
 	$.ajax({
         type: "post",
@@ -120,7 +131,9 @@ function showSelectCustomerCode(){
         }
     });
 }
-
+/**
+ * 新增配置时，选择客户后显示编辑列表
+ */
 function showPriceListColumn(){
 	$("#pageBody").text("");
 	$("#pageBody").append("<input type='hidden' name='customersInfo.customerId' value='$('#saveCustomerCode').val()'/>");
@@ -153,6 +166,9 @@ function showPriceListColumn(){
     });
 }
 
+/**
+ * 保存配置
+ */
 function savePriceListConfig() {
 	$("#msg").text("");
 	

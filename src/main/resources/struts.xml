@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
+	<!-- 文件上传临时文件路径 -->
+	<constant name="struts.multipart.saveDir" value="/tmp"/>
 	<package name="priceListConfig" namespace="/" extends="struts-default">
 		<action name="priceListConfig_*" class="com.hand.action.PriceListConfigAction" method="{1}">
 			<result>/priceListConfig/show.jsp</result>
 			<result name="success">/priceListConfig/show.jsp</result>
 		</action>
-		<action name="priceList_*" class="com.hand.action.PriceListConfigAction" method="{1}">
+		<action name="priceList_*" class="com.hand.action.PriceListAction" method="{1}">
 			<result>/priceList/show.jsp</result>
 			<result name="success">/priceList/show.jsp</result>
 		</action>

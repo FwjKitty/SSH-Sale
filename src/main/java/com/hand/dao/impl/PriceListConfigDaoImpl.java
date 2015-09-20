@@ -125,17 +125,14 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		List<PriceListConfig> priceListConfigs = null;
 		if(!priceListConfig.getActivity().equals("全部")){
 			hql.append(" and activity = ?");
-			System.out.println("1");
 			params1.add(priceListConfig.getActivity());
 		}
 		if(priceListConfig.getExcelCol() != null){
 			hql.append(" and excel_col = ?");
-			System.out.println("2");
 			params1.add(priceListConfig.getExcelCol().toString());
 		}
 		if(priceListConfig.getDisplayName() != null && !priceListConfig.getDisplayName().trim().equals("")){
 			hql.append(" and display_name like ?");
-			System.out.println("3");
 			params2.add(priceListConfig.getDisplayName());
 		}
 		hql.append(" and customer_id in (:customerIds)");
@@ -158,10 +155,63 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		}
 		return priceListConfigs;
 	}
+	
+	public List<PriceListConfig> queryByCustomerId(List<Integer> customerIds, int pageSize, int pageNow) {
+		Session session = sessionFactory.getCurrentSession();
+		StringBuilder hql = new StringBuilder("from PriceListConfig where 1=1");
+		List<PriceListConfig> priceListConfigs = null;
+		hql.append(" and customer_id in (:customerIds)");
+		try {
+			Query query = session.createQuery(hql.toString());
+			query.setParameterList("customerIds", customerIds);
+			query.setMaxResults(pageSize);
+			query.setFirstResult((pageNow-1) * pageSize);
+			priceListConfigs = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return priceListConfigs;
+	}
 
 	public int save(PriceListConfig priceListConfig) {
 		Session session = sessionFactory.getCurrentSession();
 		System.out.println((Integer) session.save(priceListConfig));
 		return (Integer) session.save(priceListConfig);
+	}
+
+	public List<PriceListConfig> queryByCustomerIdAndActivity(List<Integer> customerIds) {
+		Session session = sessionFactory.getCurrentSession();
+		StringBuilder hql = new StringBuilder("from PriceListConfig where 1=1");
+		List<PriceListConfig> priceListConfigs = null;
+		hql.append(" and activity = ?");
+		hql.append(" and customer_id in (:customerIds)");
+		hql.append(" order by customer_id,excel_col");
+		try {
+			Query query = session.createQuery(hql.toString());
+			query.setParameter(0, "是");
+			query.setParameterList("customerIds", customerIds);
+			priceListConfigs = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return priceListConfigs;
+	}
+
+	public List<PriceListConfig> queryByCustomerIdAndActivity(int customerId) {
+		Session session = sessionFactory.getCurrentSession();
+		StringBuilder hql = new StringBuilder("from PriceListConfig where");
+		List<PriceListConfig> priceListConfigs = null;
+		hql.append(" activity = ?");
+		hql.append(" and customer_id = ?");
+		hql.append(" order by excel_col");
+		try {
+			Query query = session.createQuery(hql.toString());
+			query.setParameter(0, "是");
+			query.setParameter(1, customerId);
+			priceListConfigs = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return priceListConfigs;
 	}
 }
