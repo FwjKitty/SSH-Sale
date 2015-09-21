@@ -39,9 +39,6 @@ public class CustomerListAction extends ActionSupport implements
 	/*private List customerIds;*/
 	private int PAGESIZE = 10;
 	private int curPage = 1;
-
-
-	
 	public CustomersInfo getCustomer() {
 		return customer;
 	}
@@ -102,122 +99,32 @@ public class CustomerListAction extends ActionSupport implements
 	public CustomersInfo getModel() {
 		return customer;
 	}
-	
 	public String execute() throws Exception{
-	/*	List customerIds= new ArrayList();
-		customerIds=customerService.queryIdByCodeAndTypeAndName(customerCode,type,customerName);*/
-		System.out.println("进入customerlistAction");
-		System.out.println("status:"+status);
-		//System.out.println(customerCode);
-		
-		List<CustomersInfo> customerinfo=new ArrayList<CustomersInfo>();
-		customerinfo= customerService.findAllcustomers(customerCode,type,customerName,status,groupCompany,corporation);
+
+		List<CustomersInfo> customerinfo=customerService.findAllcustomers(customerCode,type,customerName,status,groupCompany,corporation);
 		JsonArray jsonArray=new JsonArray();
 		JsonObject jo=null;
+		
 		for(int i=0;i<customerinfo.size();i++){
 			System.out.println("s");
+			jo = new JsonObject();
 			jo.addProperty("CN",customerinfo.get(i).getCustomerName());
 			jo.addProperty("CD", customerinfo.get(i).getCustomerCode());
 			jo.addProperty("Coun", customerinfo.get(i).getAddress().getCountry());
 			jo.addProperty("BM", customerinfo.get(i).getOrganization().getBusinessManager());
 			jo.addProperty("BA", customerinfo.get(i).getOrganization().getBusinessAssistant());
 			jo.addProperty("Sta", customerinfo.get(i).getAddress().getStatus());
-			jo.addProperty(customerName, customerinfo.get(i).getCustomerName());
+			jo.addProperty("id",customerinfo.get(i).getCustomerId());
 			jsonArray.add(jo);
 		}
-try{
-		HttpServletResponse response = ServletActionContext.getResponse();
-		String address = jsonArray.toString();
-		System.out.println(address);
-		response.getWriter().write(address);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-		return SUCCESS;
-	}
-
-	
-	
-	
-	
-	/*public void show() {
-		JsonObject lan = null;
-		JsonArray jArray = new JsonArray();
-
-		try {
-			customers = customerService.getCustomers();
-
-			for (int i = 0; i < customers.size(); i++) {
-				lan = new JsonObject();
-				lan.addProperty("first_name", customers.get(i).getFirstName());
-				lan.addProperty("last_name", customers.get(i).getLastName());
-				lan.addProperty("email", customers.get(i).getEmail());
-				lan.addProperty("customer_id", customers.get(i).getCustomerId());
-				lan.addProperty("address_id", customers.get(i).getAddress()
-						.getAddress().toString());
-				lan.addProperty("last_update", customers.get(i).getLastUpdate()
-						.toString());
-				jArray.add(lan);
+		try{
+				HttpServletResponse response = ServletActionContext.getResponse();
+				response.setContentType("text/html;charset=utf-8");
+				String address = jsonArray.toString();
+				response.getWriter().write(address);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			HttpServletResponse response = ServletActionContext.getResponse();
-			String address = jArray.toString();
-			System.out.println(address);
-			response.getWriter().write(address);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		return null;
 	}
-
-	public void getCount(){
-		int count;
-		try {
-			System.out.println("goback");
-			count = customerService.getCount();
-			System.out.println(count);
-			HttpServletResponse response = ServletActionContext.getResponse();
-			response.getWriter().write(String.valueOf(count));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-
-	
-	public void showPage() {
-		JsonObject lan = null;
-		JsonArray jArray = new JsonArray();
-
-		try {
-			customers = customerService.getCustomersByPage(PAGESIZE, curPage);
-			System.out.println("action+" + curPage);
-
-			for (int i = 0; i < customers.size(); i++) {
-				lan = new JsonObject();
-				lan.addProperty("first_name", customers.get(i).getFirstName());
-				lan.addProperty("last_name", customers.get(i).getLastName());
-				lan.addProperty("email", customers.get(i).getEmail());
-				lan.addProperty("customer_id", customers.get(i).getCustomerId());
-				lan.addProperty("address_id", customers.get(i).getAddress()
-						.getAddress().toString());
-				lan.addProperty("last_update", customers.get(i).getLastUpdate()
-						.toString());
-				jArray.add(lan);
-			}
-
-			HttpServletResponse response = ServletActionContext.getResponse();
-			String address = jArray.toString();
-			System.out.println(address);
-			response.getWriter().write(address);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-*/
-
-
-
-
 }

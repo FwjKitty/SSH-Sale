@@ -9,12 +9,13 @@
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-	<context:annotation-config />
+	
 
 	<!-- 使用spring注解 - 注册管理bean -->
 	<context:annotation-config />
 	<!-- spring注解搜寻范围 -->
 	<context:component-scan base-package="com.hand" />
+
 
 	<!-- 配置sessionFactory管理 -->
 
@@ -68,5 +69,6 @@
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 	<tx:annotation-driven transaction-manager="txManager" />
-	
+
+
 </beans>

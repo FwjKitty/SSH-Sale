@@ -14,18 +14,24 @@
 			<result name="success" type="redirectAction">priceList_show.action</result>
 		</action>
 		<action name="CustomerListAction" class="com.hand.action.CustomerListAction">
-			<result name="success">/customerlist.jsp</result>
+			<result>/customerlist.jsp</result>
+			<result name="error">/customerlist.jsp</result>
 		</action>
 		<action name="CustomerAddAction" class="com.hand.action.CustomeraddAction">
-			<result name="success">CustomerListAction.action</result>
+			<result name="success">/customerlist.jsp</result>
+		</action>
+		<action name="CustomerDetailed" class="com.hand.action.CustomerDetailedAction">
+			<result name="success">/customerDatialed.jsp</result>
+		</action>
+		<action name="CustomerUpdateDetailed" class="com.hand.action.CustomerDetailedAction">
+			<result name="success">/customerUpdateDatialed.jsp</result>
+		</action>
+		<action name="ConfirmAction" class="com.hand.action.ConfirmAction">
+			<result name="success">/customerlist.jsp</result>
+		</action>
+		<action name="UpdateAction" class="com.hand.action.UpdateAction">
+			<result name="success">/customerlist.jsp</result>
 		</action>
 	</package>
-<!-- 	<package extends="struts-default" name="CustomerPackage">
-		<action name="CustomerListAction" class="com.hand.action.CustomerListAction">
-			<result name="success">/customerlist.jsp</result>
-		</action>
-		<action name="CustomerAddAction" class="com.hand.action.CustomeraddAction">
-			<result name="success">/customerlist.jsp</result>
-		</action>
-	</package> -->
+
 </struts>

@@ -1,5 +1,7 @@
 package com.hand.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,9 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hand.dao.CustomersInfoDao;
 
 import com.hand.model.Address;
-
+import com.hand.model.Contactors;
 import com.hand.model.CustomersInfo;
-
+import com.hand.model.Organization;
+import com.hand.model.Payment;
 import com.hand.service.CustomersInfoService;
 
 @Service
@@ -33,24 +36,16 @@ public class CustomersInfoServiceImpl implements CustomersInfoService {
 		this.customersInfoDao = customerInfoDao;
 	}
 
-
-
 	public List<String> getPageResult(int page, int pageSize) {
-		return null;
-		
+		return null;	
 	}
-
-
-
 	public CustomersInfo getCustomer(int customerId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	public List<CustomersInfo> findAllcustomers(String customerCode, String type, String customerName, String status,
 			String groupCompany, String corporation) {
-		return customersInfoDao.findAllcustomers(customerCode,type,customerName,status, groupCompany,corporation);
-		
+		return customersInfoDao.findAllcustomers(customerCode,type,customerName,status, groupCompany,corporation);	
 	}
 
 
@@ -84,71 +79,61 @@ public class CustomersInfoServiceImpl implements CustomersInfoService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-
-	/*public Customer getCustomer(Customer customer) {
-
-		return customerDao.getCustomer(customer.getFirstName());
+	public CustomersInfo getcustomer(int customerId){
+		return customersInfoDao.getcustomer(customerId);
 	}
 
-	public Customer getCustomerById(Short id) {
-
-		return customerDao.getCustomer(id);
+	public Address getaddress(int customerId) {
+		
+		return customersInfoDao.getaddress(customerId);
 	}
-
-	// @Override
-	// public boolean register(Customer customer) {
-	// return customerDao.save(customer);
-	// }
-
-
-	public List<Customer> getCustomers() {
-
-		return customerDao.getCustomers();
+	public Payment getpayment(int customerId) {
+		return customersInfoDao.getpayment(customerId);
 	}
-
-	public List<Customer> getCustomersByPage(int pageSize, int pageNow) {
-		return customerDao.queryByPage(pageSize, pageNow);
-
+	public Organization getorganization(int customerId){
+		
+			return customersInfoDao.getorganization(customerId);
+		
+		
 	}
-
-	public void delete(Customer customer) {
-
-		customerDao.delete(customer);
-	}
-
-
-	public void update(Customer customer, short addressid) {
-
-		customerDao.update(customer, addressid);
-	}
-
-
-	public void add(Customer customer) {
-
-		customerDao.save(customer);
-	}
-
-
-	public boolean isUser(Customer customer) {
-	
-		if (customerDao.getCustomer(customer.getFirstName()) != null) {
-			return true;
+/*	public Organization getorganization(String businessManager){
+		try {
+			return customersInfoDao.getorganization(new String(businessManager.getBytes("ISO-8859-1"),"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		return false;
-	}
-
-
-	public boolean register(CustomersInfo customer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	public int getCount() {
-		int count=CustomersInfoDao.getCount();
-		return count;
+		return null;
 	}*/
+	public Contactors getcontactors(int customerId){
+		return customersInfoDao.getcontactors(customerId);
+	}
+	public String add(String customerName, String customerCode, String type, String groupCompany, String corporation,
+			String country, String state, String city, String addressLine1, String addressLine2, String postcode,
+			String portOfDestination, String shippingMark, String status, Date inactiveDate, String invoiceGroup,
+			String currency, String paymentTerm, String priceTerm1, String priceTerm2, String priceTerm3,
+			String markupName, String discountName, String marketArea, String businessManager, String businessAssistant,
+			String mailFrom, String prePoMailTo, String poMailTo, String ocpiMailTo, String invPklistMailto) {
+		return customersInfoDao.add(customerName,customerCode,type,groupCompany,corporation,country,
+				state,city,addressLine1,addressLine2,postcode,portOfDestination,shippingMark,
+				status,inactiveDate,invoiceGroup,currency,paymentTerm,priceTerm1,priceTerm2,
+				priceTerm3,markupName,discountName,marketArea,businessManager,businessAssistant,
+				mailFrom,prePoMailTo,poMailTo,ocpiMailTo,invPklistMailto);
+		 
+	}
+	public String update(int customerId,String customerName, String customerCode, String type, String groupCompany, String corporation,
+			String country, String state, String city, String addressLine1, String addressLine2, String postcode,
+			String portOfDestination, String shippingMark, String status, Date inactiveDate, String invoiceGroup,
+			String currency, String paymentTerm, String priceTerm1, String priceTerm2, String priceTerm3,
+			String markupName, String discountName, String marketArea, String businessManager, String businessAssistant,
+			String mailFrom, String prePoMailTo, String poMailTo, String ocpiMailTo, String invPklistMailto) {
+		return customersInfoDao.update(customerId,customerName,customerCode,type,groupCompany,corporation,country,
+				state,city,addressLine1,addressLine2,postcode,portOfDestination,shippingMark,
+				status,inactiveDate,invoiceGroup,currency,paymentTerm,priceTerm1,priceTerm2,
+				priceTerm3,markupName,discountName,marketArea,businessManager,businessAssistant,
+				mailFrom,prePoMailTo,poMailTo,ocpiMailTo,invPklistMailto);
+		 
+	}
+	public boolean comfirm(int customerId){
+		return customersInfoDao.comfirm(customerId);
+	}
 }

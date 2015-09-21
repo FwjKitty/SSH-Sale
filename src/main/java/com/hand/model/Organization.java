@@ -11,6 +11,10 @@ public class Organization implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer organizationId;
 	private String marketArea;
 	private String businessManager;

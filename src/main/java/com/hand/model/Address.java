@@ -157,4 +157,6 @@ public class Address implements java.io.Serializable {
 		this.customersInfos = customersInfos;
 	}
 
+	
+
 }

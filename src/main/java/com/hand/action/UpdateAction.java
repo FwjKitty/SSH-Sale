@@ -1,7 +1,6 @@
 package com.hand.action;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -9,14 +8,14 @@ import org.springframework.stereotype.Controller;
 
 import com.hand.model.Address;
 import com.hand.model.CustomersInfo;
-import com.hand.model.Organization;
 import com.hand.service.CustomersInfoService;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
-
 @Controller
-public class CustomeraddAction extends ActionSupport implements
-		ModelDriven<CustomersInfo> {
+public class UpdateAction extends ActionSupport implements
+ModelDriven<CustomersInfo> {
+
+
 
 	/**
 	 * 
@@ -30,6 +29,7 @@ public class CustomeraddAction extends ActionSupport implements
 	private String type;
 	private String groupCompany;
 	private String corporation;
+	private int customerId;
 	
 	private Address address;
 	
@@ -63,16 +63,25 @@ public class CustomeraddAction extends ActionSupport implements
 	private String ocpiMailTo;
 	private String invPklistMailto;
 	
-	private String msg;
+	private String mag;
+	
 	
 	//private List<CustomersInfo> customers;
 
-	public String getMsg() {
-		return msg;
+	public String getMag() {
+		return mag;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setMag(String mag) {
+		this.mag = mag;
 	}
 
 	public String getCountry() {
@@ -336,33 +345,21 @@ public class CustomeraddAction extends ActionSupport implements
 	}
 
 	public String execute() throws Exception{
-		System.out.println("进入addAction");
+		System.out.println("进入updateAction");
 		System.out.println(customerName);
-		/*customer.setCustomerCode(customerCode);
-		customer.setType(type);
-		customer.setCustomerName(customerName);
-		customer.setGroupCompany(groupCompany);
-		customer.setCorporation(corporation);
-		System.out.println(customer.getCustomerName().toString());
-		Address address=new Address();
-		address.setStatus(status);
-		customer.setAddress(address);
-		//Organization organization=new Organization();
-		//organization.set
-		
-		//System.out.println("add action customer"+customer);
-		customerService.add(customer);*/
+		System.out.println("客户id"+customerId);
 		System.out.println("地址1"+addressLine1);
 		System.out.println(country);
+		System.out.println("status="+status);
 		System.out.println("经理"+businessManager);
 		System.out.println("市场"+marketArea);
-		customerService.add(customerName,customerCode,type,groupCompany,corporation,country,
+		setMag("客户信息修改成功！");
+		customerService.update(customerId,customerName,customerCode,type,groupCompany,corporation,country,
 				state,city,addressLine1,addressLine2,postcode,portOfDestination,shippingMark,
 				status,inactiveDate,invoiceGroup,currency,paymentTerm,priceTerm1,priceTerm2,
 				priceTerm3,markupName,discountName,marketArea,businessManager,businessAssistant,
 				mailFrom,prePoMailTo,poMailTo,ocpiMailTo,invPklistMailto);
-		System.out.println("方法结束返回action");
-		setMsg("新建保存成功！");
+		System.out.println("方法结束返回update action");
 		return "success";
 	}
 }

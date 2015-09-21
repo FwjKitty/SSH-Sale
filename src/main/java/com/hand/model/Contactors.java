@@ -8,6 +8,10 @@ public class Contactors implements java.io.Serializable {
 
 	// Fields
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer contactorsId;
 	private CustomersInfo customersInfo;
 	private String mailFrom;

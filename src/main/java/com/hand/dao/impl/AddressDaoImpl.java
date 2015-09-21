@@ -21,7 +21,7 @@ public class AddressDaoImpl implements AddressDao {
 
 
 	
-/*	//通过id找address
+	//通过id找address
 	
 	public Address getAddress(Short id) {
 		return  (Address) sessionFactory.getCurrentSession()
@@ -39,7 +39,7 @@ public class AddressDaoImpl implements AddressDao {
 	public void getAddress1(){
 		List<Address> list=new ArrayList<Address>();
 		list=(List<Address>) sessionFactory.getCurrentSession().createQuery("from Address ").list();
-	}*/
+	}
 	
 	public Address getAddress(int customer_id) {
 		Object address_id=null;
@@ -54,7 +54,7 @@ public class AddressDaoImpl implements AddressDao {
 
 
 	
-	public List<Address> getAddress() {
+	public List<Address> getAddress2() {
 		List<Address> list=new ArrayList<Address>();
 		list= sessionFactory.openSession().createQuery("from Address ").list();
 		return  list;

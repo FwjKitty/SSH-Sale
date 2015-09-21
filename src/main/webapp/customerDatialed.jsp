@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="/struts-tags" prefix="s"%>
-<%@ page isELIgnored="false" %>
+<%@taglib uri="/struts-tags" prefix="s"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>首页</title>
+<title>主数据维护>客户管理>客户详细信息</title>
 <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
 <link href="<%=request.getContextPath() %>/css/index.css" rel="stylesheet">
 <script src="<%=request.getContextPath() %>/js/jquery-2.1.1.min.js"></script>
@@ -35,72 +34,7 @@ tr,td{
 <script type="text/javascript">
 	var page = 1;
 	var mmid = 0;
-/*  	function select(){
-		document.temp.action = "CustomerListAction.action";  
-		document.temp.submit();
-	} */
-/* 	function newcustomer(){
-		document.temp.action = "CustomerAddAction";  
-		document.temp.submit();
-	}  */
-	if("${mag}"!=null&&"${mag}"!=''){
-		alert("${mag}");
-	}
-	if("${msg}"!=null&&"${msg}"!=''){
-		alert("${msg}");
-	}
-	if("${jue}"!=null&&"${jue}"!=''){
-		alert("${jue}");
-	}
-	
 
-	function getCustomer(curPage1) {
-		
-	var	customerName=document.getElementById("text1").value;
-	var	type=document.getElementById("text2").value;
-	var	groupCompany=document.getElementById("text3").value;
-	var	customerCode=document.getElementById("text4").value;
-	var	status=document.getElementById("text5").value;
-	var	corporation=document.getElementById("text6").value;	
-	if((customerName==null||customerName=='')&&(type==null||type=='')&&(groupCompany==null||groupCompany=='')&&(customerCode==null||customerCode=='')&&(status==null||status=='')&&(corporation==null||corporation==''))
-	{
-		alert("请在表中填入需要查询的关键信息");
-		return false;
-	}else{
-		var urlGet ="<%=request.getContextPath()%>/CustomerListAction?customerName="+customerName+"&type="+type+"&groupCompany="+groupCompany
-				+"&customerCode="+customerCode+"&status="+status+"&corporation="+corporation;
-		//$("#customer").html("");
-		$.getJSON(urlGet,function(data) {
-				var row = "<tr><td>序号</td><td>客户名称</td><td>客户代码</td><td>所属TEAM</td><td>业务经理</td><td>业务助理</td><td>状态</td><td>详细信息</td><td>客户确认</td></tr>";
-				if(data == ""){
-					alert("该用户不存在！");
-				}
-				$.each(data,function(i, entry) {//遍历JSON
-					
-						row += "<tr><td>"
-								+i
-								+"</td><td>"
-								+ entry.CN
-								+"</td><td>"
-								+ entry.CD
-								+ "</td><td>"
-								+ entry.Coun
-								+ "</td><td>"
-								+ entry.BM
-								+ "</td><td>"
-								+ entry.BA
-								+ "</td><td>"
-								+ entry.Sta
-								+ "</td><td><a href='CustomerDetailed.action?customerId="+entry.id+"'><button>查看</button></a>"
-								+"<a href='CustomerUpdateDetailed.action?customerId="+entry.id+"'><button>编辑</button></a>"
-								+"</td><td><a href='ConfirmAction.action?customerId="+entry.id+"'><button>确认</button>"
-								+"</td></tr>"
-					});
-				$("#table1").html(row);
-			
-			});
-	}
-	}
 
 		//分页
 		function getFirstPage(){
@@ -127,7 +61,7 @@ tr,td{
      		 $("#sl").html(val);
     }); */
     
-    	getAddress();
+     	getAddress();
     
 		//alert("sdfsdf");
 		$("#model6").modal().css({
@@ -139,7 +73,7 @@ tr,td{
 		$("#dd").attr("value", mmid);
 		$("#model6").modal();
 	}
-	
+	 
 	
 	//向前翻页
 	function makePrePage(start){
@@ -249,7 +183,7 @@ tr,td{
 				<h3 style="color:#000; ">销售订单管理系统</h3>
 		</div>
 		<a class="navbar-brand" href="#" style="color: red"><h3
-				style="line-height: 0">主页面维护>客户管理>客户查询</h3></a>
+				style="line-height: 0">主页面维护>客户管理>客户查询</h3> </a>
 	</div>
 	<%-- <div>
 		<form class="navbar-form navbar-right" role="search">
@@ -291,7 +225,7 @@ tr,td{
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
                         data-parent="#accordion2" href="#collapseTwo">
-                        <a class="accordion-toggle">发货订单管理</a>
+                        <a class="accordion-toggle">发货单管理</a>
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse "
                         style="height: auto;">
@@ -325,7 +259,7 @@ tr,td{
                                					</ul>
                                				</div>
                                		</div>
-                                <li><a href="#">客户管理</a></li>
+                                <li><a href="customerlist.jsp">客户管理</a></li>
                                 <li><a href="#">价格表管理</a></li> 
                             </ul>
                         </div>
@@ -341,67 +275,276 @@ tr,td{
 		<div class="col-md-10">			
 	
 				<div class="row">
-					<form  id="form1"  name="temp" class="form-horizontal" role="form"  action=""  method="post">
+					<form  id="form1" class="form-horizontal" role="form"  action=""  method="post">
 									<div class="form-group">
 							            <label class="col-sm-2 control-label">客户名称</label>
 							            <div class="col-sm-2">
-							                <input  id="text1" type="text" name="customerName" class="form-control" placeholder="CustomerName" />
+							                <input disabled id="text1" type="text" name="customerName" class="form-control"  value="${customer.customerName}"/>
 							            </div>
 							            <label class="col-sm-2 control-label">类型</label>
 							            <div class="col-sm-2">
-							                <input  id="text2" type="text" name="type" class="form-control" placeholder="Type" />
+							                <input disabled id="text2" type="text" name="type" class="form-control"  value="${customer.type}" />
 							            </div>
 							             <label  id="test3" class="col-sm-2 control-label">集团公司</label>
 							            <div class="col-sm-2">
-							                <input id="text3" type="text" name="groupCompany" class="form-control" placeholder="GroupCompany" />
+							                <input disabled id="text3" type="text" name="groupCompany" class="form-control"  value="${customer.groupCompany}"/>
 							            </div>
 							           
 							        </div>
 							    		<div class="form-group">
 							            <label class="col-sm-2 control-label">客户简称</label>
 							            <div class="col-sm-2">
-							                <input id="text4" type="text" name="customerCode" class="form-control" placeholder="CustomerCode" />
+							                <input disabled id="text4" type="text" name="customerCode" class="form-control" value="${customer.customerCode}"/>
 							            </div>
 							            <label class="col-sm-2 control-label">状态</label>
 							            <div class="col-sm-2">
-							                <input id="text5" type="text" name="status" class="form-control" placeholder="Status" />
+							                <input disabled id="text5" type="text" name="status" class="form-control" value="${address.status}"/>
 							            </div>
 							             <label class="col-sm-2 control-label">总公司</label>
 							            <div class="col-sm-2">
-							                <input id="text6" type="text" name="corporation" class="form-control" placeholder="Corporation" />
+							                <input disabled id="text6" type="text" name="corporation" class="form-control" value="${customer.corporation}" />
 							            </div>
 							           
 							        </div>
 
 							        <div class="form-group">
-							            <div class="col-sm-offset-3 col-sm-3">
+							            <div class="col-sm-offset-2 col-sm-2">
 							            
-							                 <button id="button1" type="button"  class="btn"  onclick="return getCustomer(1)">
-							                   	查询
+							                 <button id="button1" type="button"  class="btn btn-info" >
+							                 <s:a href="customerlist.jsp">查询</s:a>
+							                   
 							                </button>
 							                
 							            </div>
-							            <div class="col-sm-offset-3 col-sm-3">
+							            <div class="col-sm-offset-2 col-sm-2">
 							            	
-							                 <button type="submit" id="button2" class="btn" >
-							                 <s:a href="customerNewDatialed.jsp">新建</s:a>
-							                   	
+							                 <button type="submit" id="button2" class="btn btn-info" onclick="return newcustomer()">
+							                   <s:a href="customerNewDatialed.jsp">新建</s:a>
 							                </button> 
 							            </div>
+							       <!--     <div class="col-sm-offset-2 col-sm-2">
+							            	
+							                 <button type="submit" id="button3" class="btn btn-info" onclick="return n()">
+							                  		 保存
+							                </button>   
+							            </div>  -->
 							        </div>
 								</form>
 					
-					<hr style="height:20px;whidth:auto; color:red">
+					<hr style="color：red;">
 				</div>
 
-				
+				<h4>地址信息</h4>
 					<div class="col-md-12" >
+<!-- 						<table class="table table-stripeed table-bordered table-hover" id="table1">	
+						</table> -->
 						
-						<table class="table table-stripeed table-bordered table-hover" id="table1">
-							
-							
-						</table>
-			</div>
+						<form action="" id="form2" class="form-horizontal" role="form"   method="post">
+						
+						
+								<div class="form-group">
+							            <label class="col-sm-2 control-label">地址1</label>
+							            <div class="col-sm-5">
+							            	
+							                <input disabled id="address1" type="text" name="addressLine1" class="form-control"  value="${address.addressLine1}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">地址2</label>
+							            <div class="col-sm-5">
+							                <input disabled id="address2" type="text" name="addressLine2" class="form-control" value="${address.addressLine2}" />
+							            </div>
+							    </div>
+							       <div class="form-group">
+							            <label class="col-sm-2 control-label">* 城市</label>
+							            <div class="col-sm-3">
+							                <input disabled id="address3" type="text" name="city" class="form-control"  value="${address.city}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">州/省</label>
+							            <div class="col-sm-3">
+							                <input disabled id="address5" type="text" name="state" class="form-control"  value="${address.state}"/>
+							            </div>
+							    </div>
+							   <div class="form-group">
+							            <label class="col-sm-2 control-label">* 国家</label>
+							            <div class="col-sm-3">
+							            	
+							                	<input disabled  type="text" name="state" class="form-control"  value="${address.country}"/>
+							            	
+							          
+							            </div>
+							    </div>
+							      <div class="form-group">
+							            <label class="col-sm-2 control-label" >邮编</label>
+							            <div class="col-sm-2">
+							                <input disabled id="address7" type="text" name="postcode" class="form-control" value="${address.postcode}"/>
+							            </div>
+							    </div>
+							      <div class="form-group">
+							            <label class="col-sm-2 control-label">* 目的港</label>
+							            <div class="col-sm-2">
+							                <input disabled id="address8" type="text" name="portOfDestination" class="form-control"  value="${address.portOfDestination}"/>
+							            </div>
+							    </div>
+							      <div class="form-group">
+							            <label class="col-sm-2 control-label">* 唛头</label>
+							            <div class="col-sm-4">
+							                <input disabled id="address9" type="text" name="shippingMark" class="form-control"  value="${address.shippingMark}"/>
+							            </div>
+							    </div>
+							      <div class="form-group">
+							            <label class="col-sm-2 control-label">有效</label>
+							            <div class="col-sm-2">
+							                <input disabled id="address10" type="text" name="status" class="form-control"  value="${address.status}"/>
+							            </div>
+							    </div>
+							      <div class="form-group">
+							            <label class="col-sm-2 control-label">失效日期</label>
+							            <div class="col-sm-2">
+							                <input disabled id="address11" type="text" name="inactiveDate" class="form-control" value="${address.inactiveDate}" />
+							            </div>
+							    </div>
+						<!-- 	    <div class="form-group">
+							            <div class="col-sm-offset-10 col-sm-2">
+							                 <button id="addressbutton" type="button"  class="btn btn-info"  onclick="return ">
+							                   	保存
+							                </button>
+							     		</div>              
+							 	</div> -->
+							 	
+								
+						</form>
+						
+						<hr>
+						<h4>付款信息</h4>
+						<form action="" id="form3" class="form-horizontal" role="form"   method="post">
+								<div class="form-group">
+							            <label class="col-sm-2 control-label">* 所属发票组</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="invoiceGroup" class="form-control" value="${payment.invoiceGroup}"/>
+							            </div>
+							              <label class="col-sm-2 control-label">* 通用加价条款</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="markupName" class="form-control" value="${payment.markupName}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">* 结算货币</label>
+							            <div class="col-sm-3">
+							                <input disabled type="text" name="currency" class="form-control" value="${payment.currency}"/>
+							            </div>
+							              <label class="col-sm-2 control-label">* 一般折扣</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="discountName" class="form-control" value="${payment.discountName}"/>
+							            </div>
+							    </div>
+							   <div class="form-group">
+							            <label class="col-sm-2 control-label">* 付款方式</label>
+							            <div class="col-sm-4">
+							                <input disabled  type="text" name="paymentTerm" class="form-control" value="${payment.paymentTerm}"/>
+							    		</div>
+							  </div>
+							   <div class="form-group">
+							            <label class="col-sm-2 control-label" >* 价格条款1</label>
+							            <div class="col-sm-4" >
+							               <textarea disabled rows="4" name="priceTerm1" class="form-control">${payment.priceTerm1}</textarea>
+							    		</div>
+							  </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">* 价格条款2</label>
+							            <div class="col-sm-4">
+							            	
+							               <textarea disabled class="form-control" rows="4"  name="priceTerm2">${payment.priceTerm2}</textarea>
+							    		</div>
+							  </div>
+							    <div class="form-group">
+							         <label class="col-sm-2 control-label">* 价格条款3</label>
+							        <div class="col-sm-4">
+							               <textarea disabled class="form-control" rows="4"  name="priceTerm3">${payment.priceTerm3}</textarea>
+							    	</div>
+							  </div>
+<!-- 							  <div class="form-group">
+							            <div class="col-sm-offset-10 col-sm-2">
+							                 <button id="paymentbutton" type="button"  onclick="return " class="btn btn-info">
+							                   	保存
+							                </button>
+							     		</div>              
+							 	</div> -->
+							 
+						</form>
+						<hr>
+						<h4>组织信息</h4>
+						<form action="" id="form4" class="form-horizontal" role="form"   method="post">
+								<div class="form-group">
+							            <label class="col-sm-2 control-label">* 所属ATEM</label>
+							            <div class="col-sm-2">
+							                <input disabled  type="text" name="marketArea" class="form-control" value="${organization.marketArea}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">* 业务经理</label>
+							            <div class="col-sm-2">
+							                <input  disabled type="text" name="businessManager" class="form-control" value="${organization.businessManager}"/>
+							            </div>
+							    </div>
+							      <div class="form-group">
+							            <label class="col-sm-2 control-label">* 业务助理</label>
+							            <div class="col-sm-2">
+							                <input disabled  type="text" name="businessAssistant" class="form-control" value="${organization.businessAssistant}"/>
+							            </div>
+							    </div>
+							  <!--    <div class="form-group">
+							            <div class="col-sm-offset-10 col-sm-2">
+							                 <button id="oranizationbutton" type="button"  onclick="return " class="btn btn-info">
+							                   	保存
+							                </button>
+							     		</div>              
+							 	</div> -->
+						</form>
+						<hr>
+						<h4>联系人信息</h4>
+						<form action="" id="form5" class="form-horizontal" role="form"   method="post">
+								<div class="form-group">
+							            <label class="col-sm-2 control-label">发件人邮箱</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="mailFrom" class="form-control" value="${contactors.mailFrom}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">Pre Po收件人</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="prePoMailTo" class="form-control" value="${contactors.prePoMailTo}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">Po 收件人</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="poMailTo" class="form-control" value="${contactors.poMailTo}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">OC/PI收件人</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="ocpiMailTo" class="form-control" value="${contactors.ocpiMailTo}"/>
+							            </div>
+							    </div>
+							    <div class="form-group">
+							            <label class="col-sm-2 control-label">INV/Packing list 收件人</label>
+							            <div class="col-sm-3">
+							                <input disabled  type="text" name="invPklistMailto" class="form-control" value="${contactors.invPklistMailto}"/>
+							            </div>
+							    </div>
+							<!--       <div class="form-group">
+							            <div class="col-sm-offset-10 col-sm-2">
+							                 <button id="oranizationbutton" type="button"  onclick="return " class="btn btn-info">
+							                   	保存
+							                </button>
+							     		</div>              
+							 	</div> -->
+						</form>
+					</div>
 				
 
 				</div>

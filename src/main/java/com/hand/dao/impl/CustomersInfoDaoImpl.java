@@ -1,6 +1,8 @@
 package com.hand.dao.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hand.dao.CustomersInfoDao;
 
 import com.hand.model.Address;
-
+import com.hand.model.Contactors;
 import com.hand.model.CustomersInfo;
+import com.hand.model.Organization;
+import com.hand.model.Payment;
 
 @Repository
 @Transactional
@@ -33,33 +37,56 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 	@Resource
 	private SessionFactory sessionFactory;
 
-	public CustomersInfo getCustomer(int customerId) {
-		CustomersInfo customer = null;
-		Session session = sessionFactory.getCurrentSession();
-		Query query = session.createQuery("from Customer where customer_id = "
-				+ customerId);
-		List result = query.list();
-		if (result.size() == 1) {
-			customer = (CustomersInfo) query.list().get(0);
-		}
-		return customer;
-	}
-
-/*	public List<String> getCustomers() {
-		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from Customer").list();
-	}*/
-
-
 	public List<CustomersInfo> findAllcustomers(String customerCode, String type, String customerName,String status,String groupCompany,String corporation){
 		List<CustomersInfo> customers = new ArrayList<CustomersInfo>();
 		Session session =sessionFactory.getCurrentSession();
-		//List <Object> ao=new ArrayList<Object>();
-		//StringBuilder hql = new StringBuilder("select customer_name,customer_code,country,status,business_manager,business_assistant from Customers_Info,address,organization where Customers_Info.address_id=address.address_id and Customers_Info.organization_id=organization.organization_id ");
+		String address_id= null;
 
+		if(status !=null && !status.trim().equals("")){
+			Query query1 = session.createSQLQuery("select address_Id from address where status = ?");
+			query1.setParameter(0, status);
+			address_id= query1.list().get(0).toString();
+			System.out.println("address_id="+address_id);
+			
+			StringBuilder hql=new StringBuilder("from CustomersInfo where 1=1");
+			List<String> params = new ArrayList<String>();
+			if(customerCode != null && !customerCode.trim().equals("")){
+				hql.append(" and customer_code like ?");
+				params.add(customerCode);
+			}
+			if(type != null && !type.trim().equals("")){
+				hql.append(" and type like ?");
+				params.add(type);
+			}
+			if(customerName != null && !customerName.trim().equals("")){
+				hql.append(" and customer_name like ?");
+				params.add(customerName);
+			}
+			if(address_id != null && !customerName.trim().equals("")){
+			hql.append(" and address_id like ?");
+			params.add(address_id);
+				}
+			if(groupCompany !=null && !groupCompany.trim().equals("")){
+				hql.append(" and group_Company like ?");
+				params.add(groupCompany);
+			}
+			if(corporation !=null && !corporation.trim().equals("")){
+				hql.append(" and corporation like ?");
+				params.add(corporation);
+			}
+			try {
+				Query query2 = session.createQuery(hql.toString());
+				for(int i=0; i<params.size(); i++){
+					query2.setParameter(i, "%"+params.get(i)+"%");
+				}
+				customers=query2.list(); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-		//StringBuilder hql=new StringBuilder("from CustomersInfo,Address,Organization where 1=1 ");
-		
+			return customers;
+		}
+		else{
 		StringBuilder hql=new StringBuilder("from CustomersInfo where 1=1");
 		List<String> params = new ArrayList<String>();
 		if(customerCode != null && !customerCode.trim().equals("")){
@@ -74,10 +101,7 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 			hql.append(" and customer_name like ?");
 			params.add(customerName);
 		}
-		if(status != null && !status.trim().equals("")){
-			hql.append(" and status like ?");
-			params.add(status);
-		}
+
 		if(groupCompany !=null && !groupCompany.trim().equals("")){
 			hql.append(" and group_Company like ?");
 			params.add(groupCompany);
@@ -90,41 +114,323 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 			Query query = session.createQuery(hql.toString());
 			for(int i=0; i<params.size(); i++){
 				query.setParameter(i, "%"+params.get(i)+"%");
-				//System.out.println(params.get(i));
+				
 			}
-	/*		System.out.println(query.list());
-			List list = query.list();
-			Iterator i = list.iterator();
-			 while(i.hasNext()){
-				 customers.add((CustomersInfo) i.next());
-				 System.out.println("customerinfo表查询成功");
-			 }*/
-		
-			//System.out.println("a:"+list.get(0).getAddress().getAddressLine1());
-			//String country = list.get(0).getAddress().getCountry();
 			customers=query.list();
-			//address_id=query.list().get(0).getaddress_id;
-			 
+	 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("customers"+customers);
-		System.out.println("customerinfo表查询成功");
 		return customers;
+		}
 		
 	}
+	public CustomersInfo getcustomer(int customerId){
+		System.out.println("查找进入方法");
+		CustomersInfo customer=new CustomersInfo();	
+		Session session =sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from CustomersInfo where customer_Id = ?");
+		query.setParameter(0, customerId);
+		List result = query.list();
+		if (result.size()!=0) {
+			customer = (CustomersInfo) query.list().get(0);
+			System.out.println("查询客户"+customer.getCustomerId());
+			System.out.println("查询客户方法"+customer.getCustomerCode());
+		}
+		return customer;
+	}
+	
+	public Address getaddress(int customerId){
+		System.out.println("进入GETaddress方法");
+		Address address =new Address();
+		int address_id=0;
+		Session session =sessionFactory.getCurrentSession();
+		Query query0=session.createSQLQuery("select address_id from customers_info where customer_id =?");
+		query0.setParameter(0, customerId);
+		List result0 = query0.list();
+		System.out.println(query0.list());
+		if (result0.size()!=0) {
+			System.out.println("地址id size不等0");
+			address_id = (Integer) query0.list().get(0);
+			System.out.println("地址id="+address_id);
+		}
+		
+		Query query = session.createQuery("from Address where address_id = ?");
+		query.setParameter(0, address_id);
+		List result = query.list();
+		if (result.size()!=0) {
+			address = (Address) query.list().get(0);
+			System.out.println("方法"+address.getAddressLine1());
+		}
+		return address;
+	}
+	public Payment getpayment(int customerId){
+		System.out.println("进入payment方法");
+		Payment payment=new Payment();
+		
+		System.out.println( customerId);
+		Session session =sessionFactory.getCurrentSession();
+	
+		Query query2=session.createQuery("from Payment where customer_Id ="+customerId);
+		List result2=query2.list();
+		System.out.println("q2"+query2.list());
+		if (result2.size()!=0){
+			payment=(Payment) query2.list().get(0);
+			System.out.println(payment);
+		}
+		return payment;
+	}
+	public Organization getorganization(int customerId){
+		System.out.println("进入方法org");
+		int organization_id=0;
+		Organization organization=new Organization();
+		Session session =sessionFactory.getCurrentSession();
+		
+		Query query0=session.createSQLQuery("select organization_id from customers_info where customer_id =?");
+		query0.setParameter(0, customerId);
+		List result0 = query0.list();
+		System.out.println(query0.list());
+		if (result0.size()!=0) {
+			System.out.println("地址id size不等0");
+			organization_id = (Integer) query0.list().get(0);
+			System.out.println("地址id="+organization_id);
+		}
+		
+		Query query = session.createQuery("from Organization where organization_id = ?");
+		try {
+			query.setParameter(0, organization_id);
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		List result = query.list();
+		if (result.size()!=0) {
+			organization = (Organization) query.list().get(0);
+			System.out.println("org方法"+organization.getBusinessManager());
+		}
+		return organization;
+	}
+	public Contactors getcontactors(int customerId){
+		System.out.println("进入Con方法");
+		Contactors contactors=new Contactors();
+		
+		System.out.println("cn"+customerId);
+		Session session =sessionFactory.getCurrentSession();
+		
+		Query query3=session.createQuery("from Contactors where customer_Id = ?");
+		query3.setParameter(0, customerId);
+		List result3=query3.list();
+		System.out.println("q3"+query3.list());
+		if (result3.size()!=0){
+			contactors=(Contactors) query3.list().get(0);
+			System.out.println(contactors);
+		}
+		return contactors;
+	}
 
+	public String add(String customerName, String customerCode, String type, String groupCompany, String corporation,
+			String country, String state, String city, String addressLine1, String addressLine2, String postcode,
+			String portOfDestination, String shippingMark, String status, Date inactiveDate, String invoiceGroup,
+			String currency, String paymentTerm, String priceTerm1, String priceTerm2, String priceTerm3,
+			String markupName, String discountName, String marketArea, String businessManager, String businessAssistant,
+			String mailFrom, String prePoMailTo, String poMailTo, String ocpiMailTo, String invPklistMailto) {
+		System.out.println("进入add 方法");
+		System.out.println(country);
+		Address address=new Address();
+		address.setCountry(country);
+		address.setState(state);
+		address.setCity(city);
+		address.setAddressLine1(addressLine1);
+		address.setAddressLine2(addressLine2);
+		address.setPostcode(postcode);
+		address.setPortOfDestination(portOfDestination);
+		address.setShippingMark(shippingMark);
+		address.setStatus(status);
+		address.setInactiveDate(inactiveDate);
+		System.out.println("get"+address.getAddressLine1());
+		Session session =sessionFactory.getCurrentSession();
+		try{
+		session.save(address);
+		System.out.println(session.save(address));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		Organization organization =new Organization();
+		organization.setMarketArea(marketArea);
+		organization.setBusinessManager(businessManager);
+		organization.setBusinessAssistant(businessAssistant);
+		System.out.println("or:"+organization.getBusinessAssistant());
+		try{
+			session.save(organization);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		CustomersInfo customer=new CustomersInfo();
+		customer.setCustomerName(customerName);
+		customer.setCustomerCode(customerCode);
+		customer.setType(type);
+		customer.setGroupCompany(groupCompany);
+		customer.setCorporation(corporation);
+		customer.setAddress(address);
+		customer.setOrganization(organization);
+		System.out.println("customer.address="+customer.getAddress());
+		try{
+			session.save(customer);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		Payment payment=new Payment();
+		payment.setInvoiceGroup(invoiceGroup);
+		payment.setCurrency(currency);
+		payment.setPaymentTerm(paymentTerm);
+		payment.setPriceTerm1(priceTerm1);
+		payment.setPriceTerm2(priceTerm2);
+		payment.setPriceTerm3(priceTerm3);
+		payment.setMarkupName(markupName);
+		payment.setDiscountName(discountName);
+		payment.setCustomersInfo(customer);
+		System.out.println("payment.customer.name="+payment.getCustomersInfo().getCustomerName());
+		try{
+			session.save(payment);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		Contactors contactors=new Contactors();
+		contactors.setMailFrom(mailFrom);
+		contactors.setPrePoMailTo(prePoMailTo);
+		contactors.setPoMailTo(poMailTo);
+		contactors.setOcpiMailTo(ocpiMailTo);
+		contactors.setInvPklistMailto(invPklistMailto);
+		contactors.setCustomersInfo(customer);
+		System.out.println("Ex"+contactors.getMailFrom());
+		try{
+			System.out.println("好了");
+			session.save(contactors);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+			return "success";
+	}
+	public String update(int customerId,String customerName, String customerCode, String type, String groupCompany, String corporation,
+			String country, String state, String city, String addressLine1, String addressLine2, String postcode,
+			String portOfDestination, String shippingMark, String status, Date inactiveDate, String invoiceGroup,
+			String currency, String paymentTerm, String priceTerm1, String priceTerm2, String priceTerm3,
+			String markupName, String discountName, String marketArea, String businessManager, String businessAssistant,
+			String mailFrom, String prePoMailTo, String poMailTo, String ocpiMailTo, String invPklistMailto) {
+		System.out.println("进入update 方法");
+		System.out.println(country);
+		int address_id=0;
+		Session session =sessionFactory.getCurrentSession();
+		Query query0= session.createSQLQuery("select address_id from Customers_info where customer_id = ?");
+		query0.setParameter(0, customerId);
+		List result = query0.list();
+		System.out.println(query0.list());
+		if (result.size()!=0) {
+			System.out.println("size不等0");
+			address_id = (Integer) query0.list().get(0);
+			System.out.println("地址id="+address_id);
+		}
+		Address address=(Address) session.get(Address.class, address_id);
+		System.out.println("mijigyg");
+		address.setCountry(country);
+		address.setState(state);
+		address.setCity(city);
+		address.setAddressLine1(addressLine1);
+		address.setAddressLine2(addressLine2);
+		address.setPostcode(postcode);
+		address.setPortOfDestination(portOfDestination);
+		address.setShippingMark(shippingMark);
+		address.setStatus(status);
+		session.update(address); 
+		
+		int organization_id = 0;
+		Query query1= session.createSQLQuery("select organization_id from customers_Info where customer_id = ?");
+		query1.setParameter(0, customerId);
+		List result1 = query1.list();
+		System.out.println(query1.list());
+		if (result1.size()!=0) {
+			System.out.println("size不等0");
+			organization_id = (Integer) query1.list().get(0);
+			System.out.println("地址id="+organization_id);
+		}
+		Organization organization= (Organization) session.get(Organization.class, organization_id);
+		System.out.println("mfrf");
+		organization.setMarketArea(marketArea);
+		organization.setBusinessManager(businessManager);
+		organization.setBusinessAssistant(businessAssistant);
+		session.update(organization); 
+		
+	/*	int customer_id=0;
+		Query query3= session.createSQLQuery("select customer_Id from customers_info where customer_Name = ?");
+		query3.setParameter(0, customerName);
+		List result3 = query3.list();
+		System.out.println(query3.list());
+		if (result3.size()!=0) {
+			System.out.println("size不等0");
+			customer_id =  (Integer) query3.list().get(0);
+			System.out.println("客户id="+customer_id);
+		}*/
+		CustomersInfo customer =(CustomersInfo) session.get(CustomersInfo.class, customerId);
+		customer.setCustomerName(customerName);
+		customer.setCustomerCode(customerCode);
+		customer.setType(type);
+		customer.setGroupCompany(groupCompany);
+		customer.setCorporation(corporation);
+		customer.setAddress(address);
+		customer.setOrganization(organization);
+		session.update(customer);
+		
+		Payment payment=(Payment) session.get(Payment.class, customerId);
+		payment.setInvoiceGroup(invoiceGroup);
+		payment.setCurrency(currency);
+		payment.setPaymentTerm(paymentTerm);
+		payment.setPriceTerm1(priceTerm1);
+		payment.setPriceTerm2(priceTerm2);
+		payment.setPriceTerm3(priceTerm3);
+		payment.setMarkupName(markupName);
+		payment.setDiscountName(discountName);
+		payment.setCustomersInfo(customer);
+		session.update(payment);
+		
+		Contactors contactors=(Contactors) session.get(Contactors.class, customerId);
+		contactors.setMailFrom(mailFrom);
+		contactors.setPrePoMailTo(prePoMailTo);
+		contactors.setPoMailTo(poMailTo);
+		contactors.setOcpiMailTo(ocpiMailTo);
+		contactors.setInvPklistMailto(invPklistMailto);
+		contactors.setCustomersInfo(customer);
+		session.update(contactors);
 
-
+		return "success";
+	}
+	
+	public boolean comfirm(int customerId){
+		int address_id=0;
+		Session session =sessionFactory.getCurrentSession();
+		Query query0=session.createSQLQuery("select address_id from customers_info where customer_id =?");
+		query0.setParameter(0, customerId);
+		List result0 = query0.list();
+		System.out.println(query0.list());
+		if (result0.size()!=0) {
+			System.out.println("地址id size不等0");
+			address_id = (Integer) query0.list().get(0);
+			System.out.println("地址id="+address_id);
+		}
+		Query query1=session.createSQLQuery("update address set status= ? where address_id=?");
+		query1.setParameter(0,"确认");
+		query1.setParameter(1, address_id);
+		int result = query1.executeUpdate();
+		if(result != 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public int getCount() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-//
-//	public List<CustomersInfo> queryByPage(int pageSize, int pageNow) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
 	public void update(CustomersInfo customer, int customerId) {
 		// TODO Auto-generated method stub
@@ -134,7 +440,10 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 	public void add(CustomersInfo customer) {
 		Session session =sessionFactory.getCurrentSession();
 		try {
-			session.save(customer);
+			System.out.println("进入add方法");
+			session.save(customer);	
+			
+				//Query query=session.createSQLQuery("insert into Customer_(first_name,last_name,email,address_id,active,create_date,last_update,store_id) values (?,?,?,?,?,?,?,?)");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -151,186 +460,7 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 	}
 
 
-/*
-	public Customer getCustomer(String firstName, String password) {
-		return (Customer) sessionFactory.getCurrentSession()
-				.createQuery("from Customer where username=? and password=?")
-				.setParameter(0, firstName).setParameter(1, password)
-				.uniqueResult();
-	}
 
-
-	public Customer getCustomer(String firstName) {
-		return (Customer) sessionFactory.getCurrentSession()
-				.createQuery("from Customer where firstName=?")
-				.setParameter(0, firstName).uniqueResult();
-	}
-
-
-	public int getCount() {
-		System.out.println("count----------");
-		Session session = sessionFactory.getCurrentSession();
-		int count=0;
-	try {
-		
-		Object obj= session.createSQLQuery(" select count(1) from  Customer ").uniqueResult();
-		 count=Integer.parseInt(obj.toString());
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-		return count;
-	}
-	
-
-
-	public List<Customer> getCustomers() {
-
-		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("from Customer").list();
-	}
-
-	public List<Customer> queryByPage(int pageSize, int pageNow) {
-
-		List<Customer> list = null;
-		if (pageSize > 0 && pageNow > 0) {
-			Session session = sessionFactory.getCurrentSession();
-			Query query = session.createQuery("from Customer");
-			query.setMaxResults(pageSize);
-			query.setFirstResult((pageNow-1) * pageSize);
-			list = query.list();
-		}
-		return list;
-
-	}
-
-	public boolean update(String hql) {
-		boolean result = true;
-		Query query = null;
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			query = session.createQuery(hql);
-			query.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = false;
-		} finally {
-			session.close();
-		}
-		return result;
-	}
-
-	public boolean updateSQL(String sql) {
-		boolean result = true;
-		Query query = null;
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			query = session.createSQLQuery(sql);
-			query.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = false;
-		} finally {
-			session.close();
-		}
-		return result;
-	}
-
-	// 查询
-	public List select(String hql) {
-		List result = null;
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			Query query = session.createQuery(hql);
-			result = query.list();
-			session.close();
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-
-		return result;
-	}
-
-	// 得到ID
-	public Customer getCustomer(Short customerId) {
-		Customer customer = null;
-		Session session = sessionFactory.getCurrentSession();
-		Query query = session.createQuery("from Customer where customerId = "
-				+ customerId);
-		List result = query.list();
-		if (result.size() == 1) {
-			customer = (Customer) query.list().get(0);
-		}
-		return customer;
-	}
-
-	public Object getCustomerTest(Class ob, Short customerId) {
-		Object result = null;
-		Transaction tx = null;
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			tx = session.beginTransaction();
-			result = session.get(ob, customerId);
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-			result = null;
-		} finally {
-			session.close();
-		}
-
-		return result;
-	}
-
-	
-	public void update(Customer customer,short addressid) {
-		try {
-			System.out.println("更新daoimpl");
-			System.out.println("emali" + customer.getEmail());
-			String hql = "update Customer cu set cu.firstName=?,cu.lastName=?,cu.email=?,cu.address=? where cu.customerId=?";
-			Session session = sessionFactory.getCurrentSession();
-			// Session session = sessionFactory.getCurrentSession();
-			Query query = session.createQuery(hql);
-			query.setString(0, customer.getFirstName());
-			query.setString(1, customer.getLastName());
-			query.setString(2, customer.getEmail());
-			query.setShort(3, addressid);
-			query.setShort(4, customer.getCustomerId());
-			query.executeUpdate();
-
-			System.out.println("emali" + customer.getFirstName()
-					+ customer.getLastName());
-
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-
-	public void add(Customer customer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void save(Customer customer) {
-		
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			session.save(customer);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	public void delete(Customer customer) {
-		Session session = sessionFactory.getCurrentSession();
-		session.delete(customer);
-	}
-
-	*/
 	public List<Integer> queryIdByCodeAndTypeAndName(CustomersInfo customersInfo) {
 		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("select customer_id from customers_info where 1=1 ");
@@ -359,4 +489,5 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao{
 		}
 		return customerIds;
 	}
+
 }
