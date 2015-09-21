@@ -29,9 +29,7 @@
 		format('svg');
 }
 </style>
-<script type="text/javascript">
-	getPriceListPage(1);
-</script>
+
 </head>
 <body>
 
@@ -176,7 +174,7 @@
 							        <div class="form-group">
 							            <label class="col-sm-3 control-label">工厂型号</label>
 							            <div class="col-sm-3">
-							                <input type="text" name="priceList.hyItem" class="form-control" placeholder="HYItem" />
+							                <input type="text" name="priceList.hy_item" class="form-control" placeholder="HYItem" />
 							            </div>
 							        </div>
 							        <div class="form-group">
@@ -187,12 +185,12 @@
 							                <button type="button" class="btn" onclick="showSelectCustomerCode()">
 							                  	 新增
 							                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							                <button type="submit" class="btn">
+							                <button type="button" class="btn" onclick="savePriceLists()">
 							                  	 保存
 							                </button>
 							            </div>
 							            <div class="col-sm-offset-1 col-sm-3">
-							                <button type="submit" class="btn" id="exportPriceList">
+							                <button type="button" class="btn" id="exportPriceList">
 							                   	导出Excel
 							                </button>
 							                <button type="button" class="btn" onclick="showImportPriceList()">
@@ -203,11 +201,13 @@
 								</form>
 								</div>
 							</div>
-							<div class="col-sm-12"><hr style="border:3px solid #780000;"></div>
+							<div class="col-sm-12">
+								<hr style="border:3px solid #780000;">
+							</div>
 							<div class="panel-body" id="priceListPanel">
+								<form id="saveForm" method="post">
 								<table class="table table-striped table-bordered table-hover well" style="text-align:center;">
 									<thead style="background-color:#1e90ff" id="pageHead">
-										
 									</thead>
 									<tbody id="pageBody">
 									</tbody>
@@ -221,6 +221,7 @@
 										</tr>
 									</tfoot> --%>
 								</table>
+								</form>
 							</div>
 					</div>
 				</div>

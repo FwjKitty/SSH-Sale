@@ -25,7 +25,6 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao {
 	private SessionFactory sessionFactory;
 
 
-	@Override
 	public List<CustomersInfo> findAllcustomers(String customerCode,
 			String type, String customerName, String status,
 			String groupCompany, String corporation) {
@@ -33,31 +32,26 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao {
 		return null;
 	}
 
-	@Override
 	public Address getaddress(String country) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Payment getpayment(String customerName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Organization getorganization(String businessManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Contactors getcontactors(String customerName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String add(String customerName, String customerCode, String type,
 			String groupCompany, String corporation, String country,
 			String state, String city, String addressLine1,
@@ -73,37 +67,31 @@ public class CustomersInfoDaoImpl implements CustomersInfoDao {
 		return null;
 	}
 
-	@Override
 	public boolean comfirm(String status) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public List<CustomersInfo> queryByPage(int pageSize, int pageNow) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void update(CustomersInfo customer, int customerId) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void add(CustomersInfo customer) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void delete(CustomersInfo customer) {
 		// TODO Auto-generated method stub
 		

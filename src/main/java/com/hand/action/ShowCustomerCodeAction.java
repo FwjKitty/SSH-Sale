@@ -1,7 +1,5 @@
 package com.hand.action;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hand.dao.ShowCustomerCodeDao;
-import com.hand.dao.SpecialDiscountDao;
 import com.hand.model.CustomersInfo;
-import com.hand.model.SpecialDiscount;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -57,9 +53,7 @@ public class ShowCustomerCodeAction extends ActionSupport implements
 
 	}
 
-	@Override
 	public CustomersInfo getModel() {
-		// TODO Auto-generated method stub
 		return customersInfo;
 	}
 

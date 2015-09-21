@@ -1,17 +1,12 @@
 package com.hand.action;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FileUtils;
-
 import org.apache.struts2.ServletActionContext;
-import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Controller;
 
 import com.google.gson.JsonArray;
@@ -90,13 +85,8 @@ public class PriceListConfigAction extends ActionSupport {
 		}
 	}
 	public void validateSearch() {
-		if ((customersInfo.getCustomerCode() == null || customersInfo.getCustomerCode().trim().equals(""))
-    		  &&(customersInfo.getType() == null || customersInfo.getType().trim().equals(""))
-    		  &&(customersInfo.getCustomerName() == null || customersInfo.getCustomerName().trim().equals(""))
-    		  &&(priceListConfig.getActivity() == null || priceListConfig.getActivity().trim().equals(""))
-    		  &&(priceListConfig.getExcelCol() == null || priceListConfig.getExcelCol().toString().trim().equals(""))
-    		  &&(priceListConfig.getDisplayName() == null || priceListConfig.getDisplayName().trim().equals(""))){
-    	  addFieldError("msg","请输入查询内容");
+		if (customersInfo == null && priceListConfig == null){
+			addFieldError("msg","请输入查询内容");
       	}
 	}
 	
@@ -120,7 +110,6 @@ public class PriceListConfigAction extends ActionSupport {
 	public void showPriceListColumn(){
 		JsonObject jsonObject = getPriceListColumn();
 		try {
-			System.out.println(jsonObject.toString());
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html;charset=utf-8");
 			response.getWriter().write(jsonObject.toString());

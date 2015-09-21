@@ -247,7 +247,6 @@ public class NormalDiscountAction extends ActionSupport implements
 
 	}
 
-	@Override
 	public NormalDiscount getModel() {
 		// TODO Auto-generated method stub
 		return normalDiscount;

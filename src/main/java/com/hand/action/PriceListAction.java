@@ -14,9 +14,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 
@@ -28,6 +25,8 @@ import com.hand.model.PriceListConfig;
 import com.hand.service.PriceListService;
 import com.opensymphony.xwork2.ActionSupport;
 
+import net.sf.json.JSONArray;
+
 @Controller
 public class PriceListAction extends ActionSupport {
 
@@ -38,6 +37,7 @@ public class PriceListAction extends ActionSupport {
 	private int count;
 	private CustomersInfo customersInfo;
 	private PriceList priceList;
+	private List<PriceList> priceLists;
 	private File priceListFile;
 	private String priceListFileFileName;
 	private String priceListFileContentType;
@@ -57,10 +57,10 @@ public class PriceListAction extends ActionSupport {
 			for (int i = 0; i < priceList.size(); i++) {
 				jsonObject = new JsonObject();
 //				jsonObject.addProperty("number", i+1);
-				jsonObject.addProperty("priceListId", priceList.get(i).getPriceListId());
-				jsonObject.addProperty("hyItem", priceList.get(i).getHyItem());
-				jsonObject.addProperty("effectiveDateFrom", priceList.get(i).getEffectiveDateFrom().toString());
-				jsonObject.addProperty("effectiveDateTo", priceList.get(i).getEffectiveDateTo().toString());
+				jsonObject.addProperty("priceListId", priceList.get(i).getPrice_list_id());
+				jsonObject.addProperty("hyItem", priceList.get(i).getHy_item());
+				jsonObject.addProperty("effectiveDateFrom", priceList.get(i).getEffective_date_from().toString());
+				jsonObject.addProperty("effectiveDateTo", priceList.get(i).getEffective_date_to().toString());
 				jsonArray.add(jsonObject);
 			}
 			HttpServletResponse response = ServletActionContext.getResponse();
@@ -78,6 +78,7 @@ public class PriceListAction extends ActionSupport {
 		try{
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html;charset=utf-8");
+			System.out.println(priceLists.toString());
 			response.getWriter().write(priceLists.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -86,7 +87,7 @@ public class PriceListAction extends ActionSupport {
 	public void validateSearch() {
 		if ((customersInfo.getCustomerCode() == null || customersInfo.getCustomerCode().trim().equals(""))
     		  &&(customersInfo.getType() == null || customersInfo.getType().trim().equals(""))
-    		  &&(priceList.getHyItem() == null || priceList.getHyItem().trim().equals(""))){
+    		  &&(priceList.getHy_item() == null || priceList.getHy_item().trim().equals(""))){
     	  addFieldError("msg","请输入查询内容");
       	}
 	}
@@ -125,6 +126,21 @@ public class PriceListAction extends ActionSupport {
 		}
 	}
 	
+	public void save(){
+		int result = priceListService.saveList(priceLists);
+		try{
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html;charset=utf-8");
+			if(result == 1){
+				response.getWriter().write("保存成功！");
+			}else{
+				response.getWriter().write("保存数据失败，请重新添加！");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void importPriceListShow(){
 		List<PriceListConfig> priceListConfigs = priceListService.getHeader(customersInfo);
 		JsonObject jsonObject = new JsonObject();
@@ -141,36 +157,38 @@ public class PriceListAction extends ActionSupport {
 	}
 	
 	public void importPriceList(){
-		String destPath = ServletActionContext.getServletContext().getRealPath("/")+"/upload/";
+		String destPath = ServletActionContext.getServletContext().getRealPath("/")+"upload/";
 		System.out.println(destPath);
-		File destFile = new File(destPath,priceListFileFileName);
 		try {
+			//需要解析的Excel文件
+			File destFile = new File(destPath,priceListFileFileName);
 			FileUtils.copyFile(priceListFile, destFile);
-			System.out.println("destFile path:"+destFile.getAbsolutePath());
-			System.out.println("priceListFile path:"+priceListFile.getAbsolutePath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//需要解析的Excel文件
-		File file = new File("poi_test.xls");
-		try {
+			System.out.println(destFile.getAbsolutePath());
 			//创建Excel，读取文件内容
-			HSSFWorkbook workbook = new HSSFWorkbook(FileUtils.openInputStream(file));
+			HSSFWorkbook workbook = new HSSFWorkbook(FileUtils.openInputStream(destFile));
 			//读取默认第一个工作表sheet
 			HSSFSheet sheet = workbook.getSheetAt(0);
 			//获取sheet中最后一行行号
 			int lastRowNum = sheet.getLastRowNum();
-			for(int i=0; i<lastRowNum; i++){
+			
+			JsonArray jsonArray = new JsonArray();
+			JsonObject jsonObject = null;
+			
+			for(int i=1; i<lastRowNum; i++){
+				jsonObject = new JsonObject();
 				HSSFRow row = sheet.getRow(i);
 				int lastCellNum = row.getLastCellNum();
 				for(int j=0; j<lastCellNum; j++){
 					HSSFCell cell = row.getCell(j);
-					String value = cell.getStringCellValue();
-					System.out.print(value+"\t");
+					String value = getValue(cell);
+					jsonObject.addProperty("column"+(j+1), value);
 				}
-				System.out.println();
+				jsonArray.add(jsonObject);
 			}
 			workbook.close();
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().write(jsonArray.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -241,5 +259,11 @@ public class PriceListAction extends ActionSupport {
 	}
 	public void setPriceListFileContentType(String priceListFileContentType) {
 		this.priceListFileContentType = priceListFileContentType;
+	}
+	public List<PriceList> getPriceLists() {
+		return priceLists;
+	}
+	public void setPriceLists(List<PriceList> priceLists) {
+		this.priceLists = priceLists;
 	}
 }

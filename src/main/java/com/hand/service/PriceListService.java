@@ -16,4 +16,5 @@ public interface PriceListService {
 	List<PriceListConfig> getHeader(CustomersInfo customersInfo);
 	JsonArray searchPriceList(CustomersInfo customersInfo,PriceList priceList);
 	List<CustomersInfo> getCustomerCodes();
+	int saveList(List<PriceList> priceLists);
 }

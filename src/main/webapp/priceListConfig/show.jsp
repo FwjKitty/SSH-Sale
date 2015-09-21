@@ -28,9 +28,7 @@
 		format('svg');
 }
 </style>
-<script type="text/javascript">
-	getPriceListConfigPage(1);
-</script>
+
 </head>
 <body>
 
@@ -161,6 +159,7 @@
 						<div class="panel">
 							<div class="panel-heading">
 								<div class="col-sm-10"><%-- action="<%=request.getContextPath() %>/priceListConfig_save.action" --%>
+								<s:fielderror/>
 								<form class="form-horizontal" role="form" id="searchForm" method="post">
 									<div class="form-group">
 							            <label class="col-sm-3 control-label">客户简称</label>
@@ -198,7 +197,7 @@
 							        </div>
 							        <div class="form-group">
 							            <div class="col-sm-offset-4 col-sm-3">
-							                <button class="btn" onclick="searchPriceListConfig(1)">
+							                <button type="button" class="btn" onclick="searchPriceListConfig(1)">
 							                   	查询/修改
 							                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							                <button type="submit" class="btn">

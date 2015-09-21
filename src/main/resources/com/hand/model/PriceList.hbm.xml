@@ -6,7 +6,7 @@
 -->
 <hibernate-mapping>
     <class name="com.hand.model.PriceList" table="price_list" catalog="sale">
-        <id name="priceListId" type="java.lang.Integer">
+        <id name="price_list_id" type="java.lang.Integer">
             <column name="price_list_id" />
             <generator class="identity" />
         </id>
@@ -16,103 +16,103 @@
         <property name="type" type="java.lang.String">
             <column name="type" length="8" not-null="true" />
         </property>
-        <property name="hyItem" type="java.lang.String">
+        <property name="hy_item" type="java.lang.String">
             <column name="hy_item" length="20" not-null="true" />
         </property>
-        <property name="effectiveDateFrom" type="java.util.Date">
+        <property name="effective_date_from" type="java.util.Date">
             <column name="effective_date_from" length="10" />
         </property>
-        <property name="effectiveDateTo" type="java.util.Date">
+        <property name="effective_date_to" type="java.util.Date">
             <column name="effective_date_to" length="10" />
         </property>
-        <property name="userDef1" type="java.lang.String">
+        <property name="user_def1" type="java.lang.String">
             <column name="user_def1" length="20" />
         </property>
-        <property name="userDef2" type="java.lang.String">
+        <property name="user_def2" type="java.lang.String">
             <column name="user_def2" length="20" />
         </property>
-        <property name="userDef3" type="java.lang.String">
+        <property name="user_def3" type="java.lang.String">
             <column name="user_def3" length="20" />
         </property>
-        <property name="userDef4" type="java.lang.String">
+        <property name="user_def4" type="java.lang.String">
             <column name="user_def4" length="20" />
         </property>
-        <property name="userDef5" type="java.lang.String">
+        <property name="user_def5" type="java.lang.String">
             <column name="user_def5" length="20" />
         </property>
-        <property name="userDef6" type="java.lang.String">
+        <property name="user_def6" type="java.lang.String">
             <column name="user_def6" length="20" />
         </property>
-        <property name="userDef7" type="java.lang.String">
+        <property name="user_def7" type="java.lang.String">
             <column name="user_def7" length="20" />
         </property>
-        <property name="userDef8" type="java.lang.String">
+        <property name="user_def8" type="java.lang.String">
             <column name="user_def8" length="20" />
         </property>
-        <property name="userDef9" type="java.lang.String">
+        <property name="user_def9" type="java.lang.String">
             <column name="user_def9" length="20" />
         </property>
-        <property name="userDef10" type="java.lang.String">
+        <property name="user_def10" type="java.lang.String">
             <column name="user_def10" length="20" />
         </property>
-        <property name="userDef11" type="java.lang.String">
+        <property name="user_def11" type="java.lang.String">
             <column name="user_def11" length="20" />
         </property>
-        <property name="userDef12" type="java.lang.String">
+        <property name="user_def12" type="java.lang.String">
             <column name="user_def12" length="20" />
         </property>
-        <property name="userDef13" type="java.lang.String">
+        <property name="user_def13" type="java.lang.String">
             <column name="user_def13" length="20" />
         </property>
-        <property name="userDef14" type="java.lang.String">
+        <property name="user_def14" type="java.lang.String">
             <column name="user_def14" length="20" />
         </property>
-        <property name="userDef15" type="java.lang.String">
+        <property name="user_def15" type="java.lang.String">
             <column name="user_def15" length="20" />
         </property>
-        <property name="userDef16" type="java.lang.String">
+        <property name="user_def16" type="java.lang.String">
             <column name="user_def16" length="20" />
         </property>
-        <property name="userDef17" type="java.lang.String">
+        <property name="user_def17" type="java.lang.String">
             <column name="user_def17" length="20" />
         </property>
-        <property name="userDef18" type="java.lang.String">
+        <property name="user_def18" type="java.lang.String">
             <column name="user_def18" length="20" />
         </property>
-        <property name="userDef19" type="java.lang.String">
+        <property name="user_def19" type="java.lang.String">
             <column name="user_def19" length="20" />
         </property>
-        <property name="userDef20" type="java.lang.String">
+        <property name="user_def20" type="java.lang.String">
             <column name="user_def20" length="20" />
         </property>
-        <property name="userDef21" type="java.lang.String">
+        <property name="user_def21" type="java.lang.String">
             <column name="user_def21" length="20" />
         </property>
-        <property name="userDef22" type="java.lang.String">
+        <property name="user_def22" type="java.lang.String">
             <column name="user_def22" length="20" />
         </property>
-        <property name="userDef23" type="java.lang.String">
+        <property name="user_def23" type="java.lang.String">
             <column name="user_def23" length="20" />
         </property>
-        <property name="userDef24" type="java.lang.String">
+        <property name="user_def24" type="java.lang.String">
             <column name="user_def24" length="20" />
         </property>
-        <property name="userDef25" type="java.lang.String">
+        <property name="user_def25" type="java.lang.String">
             <column name="user_def25" length="20" />
         </property>
-        <property name="userDef26" type="java.lang.String">
+        <property name="user_def26" type="java.lang.String">
             <column name="user_def26" length="20" />
         </property>
-        <property name="userDef27" type="java.lang.String">
+        <property name="user_def27" type="java.lang.String">
             <column name="user_def27" length="20" />
         </property>
-        <property name="userDef28" type="java.lang.String">
+        <property name="user_def28" type="java.lang.String">
             <column name="user_def28" length="20" />
         </property>
-        <property name="userDef29" type="java.lang.String">
+        <property name="user_def29" type="java.lang.String">
             <column name="user_def29" length="20" />
         </property>
-        <property name="userDef30" type="java.lang.String">
+        <property name="user_def30" type="java.lang.String">
             <column name="user_def30" length="20" />
         </property>
     </class>

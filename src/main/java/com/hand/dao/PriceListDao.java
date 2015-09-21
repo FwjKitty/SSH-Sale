@@ -15,4 +15,5 @@ public interface PriceListDao {
 			PriceList priceList,List<PriceListConfig> priceListConfigs);
 	JsonArray queryByCustomerIdAndActivity(List<Integer> customerIds,
 			List<PriceListConfig> priceListConfigs);
+	int save(List<PriceList> priceLists);
 }

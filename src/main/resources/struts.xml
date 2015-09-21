@@ -24,13 +24,13 @@
 
 
 
-	<package name="priceListConfig" namespace="/" extends="struts-default">
+	<package name="priceList" namespace="/" extends="struts-default">
 		<action name="priceListConfig_*" class="com.hand.action.PriceListConfigAction"
 			method="{1}">
 			<result>/priceListConfig/show.jsp</result>
 			<result name="success">/priceListConfig/show.jsp</result>
 		</action>
-		<action name="priceList_*" class="com.hand.action.PriceListConfigAction"
+		<action name="priceList_*" class="com.hand.action.PriceListAction"
 			method="{1}">
 			<result>/priceList/show.jsp</result>
 			<result name="success">/priceList/show.jsp</result>

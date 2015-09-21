@@ -1,6 +1,5 @@
 package com.hand.dao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,6 +7,7 @@ import javax.annotation.Resource;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +63,8 @@ public class PriceListDaoImpl implements PriceListDao {
 		JsonArray jsonArray = new JsonArray();
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("price_list_id", "price_list_id");
-		columns.append("price_list_id,");
+		jsonObject.addProperty("customersInfo.customerId", "customersInfo.customerId");
+		columns.append("price_list_id,customer_id,");
 		for(int i=0; i<priceListConfigs.size(); i++){
 			jsonObject.addProperty(priceListConfigs.get(i).getPriceListCol(),priceListConfigs.get(i).getDisplayName());
 			if(i == priceListConfigs.size()-1){
@@ -73,8 +74,8 @@ public class PriceListDaoImpl implements PriceListDao {
 			}
 		}
 		StringBuilder sql = new StringBuilder("select "+columns+" from price_list where 1=1");
-		if(!priceList.getHyItem().equals("") && priceList.getHyItem() != null){
-			sql.append(" and hy_item like %"+priceList.getHyItem()+"%");
+		if(!priceList.getHy_item().equals("") && priceList.getHy_item() != null){
+			sql.append(" and hy_item like %"+priceList.getHy_item()+"%");
 		}
 		sql.append(" and customer_id in (:customerIds)");
 		try {
@@ -86,6 +87,8 @@ public class PriceListDaoImpl implements PriceListDao {
 				for(int i=0; i<priceListConfigs.size(); i++){
 					if(i == 0){
 						jsonObject.addProperty("price_list_id",obj[i].toString());
+					}else if(i == 1){
+						jsonObject.addProperty("customersInfo.customerId",obj[i].toString());
 					}else{
 						jsonObject.addProperty(priceListConfigs.get(i-1).getPriceListCol(),obj[i].toString());
 					}
@@ -104,7 +107,8 @@ public class PriceListDaoImpl implements PriceListDao {
 		JsonArray jsonArray = new JsonArray();
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("price_list_id", "price_list_id");
-		columns.append("price_list_id,");
+		jsonObject.addProperty("customersInfo.customerId", "customersInfo.customerId");
+		columns.append("price_list_id,customer_id,");
 		for(int i=0; i<priceListConfigs.size(); i++){
 			jsonObject.addProperty(priceListConfigs.get(i).getPriceListCol(),priceListConfigs.get(i).getDisplayName());
 			if(i == priceListConfigs.size()-1){
@@ -125,8 +129,10 @@ public class PriceListDaoImpl implements PriceListDao {
 				for(int i=0; i<obj.length; i++){
 					if(i == 0){
 						jsonObject.addProperty("price_list_id",obj[i].toString());
+					}else if(i == 1){
+						jsonObject.addProperty("customersInfo.customerId",obj[i].toString());
 					}else{
-						jsonObject.addProperty(priceListConfigs.get(i-1).getPriceListCol(),obj[i].toString());
+						jsonObject.addProperty(priceListConfigs.get(i-2).getPriceListCol(),obj[i].toString());
 					}
 				}
 				jsonArray.add(jsonObject);
@@ -135,5 +141,21 @@ public class PriceListDaoImpl implements PriceListDao {
 			e.printStackTrace();
 		}
 		return jsonArray;
+	}
+
+	public int save(List<PriceList> priceLists) {
+		Session session = sessionFactory.getCurrentSession();
+		//Transaction tx = session.getTransaction();
+		try{
+			for(PriceList priceList : priceLists){
+				session.save(priceList);
+				//tx.commit();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			//tx.rollback();
+			return 0;
+		}
+		return 1;
 	}
 }

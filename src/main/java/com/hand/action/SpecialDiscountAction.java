@@ -266,7 +266,6 @@ public class SpecialDiscountAction extends ActionSupport implements
 		
 	}
 
-	@Override
 	public SpecialDiscount getModel() {
 		// TODO Auto-generated method stub
 		return specialDiscount;
