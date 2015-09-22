@@ -1,9 +1,8 @@
-/*
+﻿/*
 SQLyog Ultimate v11.11 (64 bit)
-MySQL - 5.6.26 : Database - sale
+MySQL - 5.5.28 : Database - sale
 *********************************************************************
-*/
-
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -13,9 +12,9 @@ MySQL - 5.6.26 : Database - sale
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE sale /*!32312 IF NOT EXISTS*/`sale` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`sale` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `sale`;
+USE `sale1`;
 
 /*Table structure for table `address` */
 
@@ -31,12 +30,13 @@ CREATE TABLE `address` (
   `postcode` varchar(15) NOT NULL,
   `port_of_destination` varchar(20) NOT NULL,
   `shipping_mark` varchar(100) NOT NULL,
-  `status` varchar(15) NOT NULL,
+  `status` varchar(15) NOT NULL DEFAULT '待确认',
   `inactive_date` date DEFAULT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `address` */
+
 
 /*Table structure for table `contactors` */
 
@@ -51,8 +51,8 @@ CREATE TABLE `contactors` (
   `INV_Pklist_mailto` varchar(200) DEFAULT NULL,
   `customer_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`contactors_id`),
-  KEY `fk_contactors_customers_info` (`customer_id`),
-  CONSTRAINT `fk_contactors_customers_info` FOREIGN KEY (`customer_id`) REFERENCES `customers_info` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_contactors_custom` (`customer_id`),
+  CONSTRAINT `fk_contactors_custom` FOREIGN KEY (`customer_id`) REFERENCES `customers_info` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `contactors` */
@@ -75,9 +75,10 @@ CREATE TABLE `customers_info` (
   KEY `fk_customers_info_origanization` (`organization_id`),
   CONSTRAINT `fk_customers_info_address` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_customers_info_origanization` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`organization_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `customers_info` */
+
 
 /*Table structure for table `discount_applied_records` */
 
@@ -96,9 +97,10 @@ CREATE TABLE `discount_applied_records` (
   PRIMARY KEY (`record_id`),
   KEY `fk_discount_applied_records_special_discount` (`discount_id`),
   CONSTRAINT `fk_discount_applied_records_special_discount` FOREIGN KEY (`discount_id`) REFERENCES `special_discount` (`discount_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `discount_applied_records` */
+
 
 /*Table structure for table `normal_discount` */
 
@@ -106,16 +108,18 @@ DROP TABLE IF EXISTS `normal_discount`;
 
 CREATE TABLE `normal_discount` (
   `normal_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `discount_name` varchar(30) NOT NULL COMMENT '3%折扣',
-  `type` varchar(8) NOT NULL,
+  `discount_name` varchar(30) NOT NULL,
+  `type` varchar(20) NOT NULL,
   `discount_base` varchar(8) NOT NULL,
-  `Base_qty` decimal(8,0) DEFAULT NULL,
-  `discount_rate` decimal(8,0) NOT NULL,
-  `activity` varchar(2) DEFAULT '是',
+  `Base_qty` int(11) DEFAULT NULL,
+  `discount_rate` decimal(11,2) NOT NULL,
+  `activity` varchar(8) DEFAULT '是',
   PRIMARY KEY (`normal_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 /*Data for the table `normal_discount` */
+
+
 
 /*Table structure for table `organization` */
 
@@ -127,9 +131,10 @@ CREATE TABLE `organization` (
   `business_manager` varchar(15) NOT NULL,
   `business_assistant` varchar(15) NOT NULL,
   PRIMARY KEY (`organization_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `organization` */
+
 
 /*Table structure for table `payment` */
 
@@ -147,8 +152,8 @@ CREATE TABLE `payment` (
   `discount_name` varchar(20) NOT NULL,
   `customer_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`payment_id`),
-  KEY `fk_payment_customers_info` (`customer_id`),
-  CONSTRAINT `fk_payment_customers_info` FOREIGN KEY (`customer_id`) REFERENCES `customers_info` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_pay_customer` (`customer_id`),
+  CONSTRAINT `fk_pay_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers_info` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `payment` */
@@ -160,6 +165,7 @@ DROP TABLE IF EXISTS `price_list`;
 CREATE TABLE `price_list` (
   `price_list_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) unsigned NOT NULL,
+  `type` varchar(8) NOT NULL,
   `hy_item` varchar(20) NOT NULL,
   `effective_date_from` date DEFAULT NULL,
   `effective_date_to` date DEFAULT NULL,
@@ -207,6 +213,7 @@ DROP TABLE IF EXISTS `price_list_config`;
 CREATE TABLE `price_list_config` (
   `price_list_config_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) unsigned NOT NULL,
+  `type` varchar(8) NOT NULL,
   `display_name` varchar(20) DEFAULT NULL,
   `price_list_col` varchar(30) NOT NULL,
   `excel_col` int(3) DEFAULT NULL,
@@ -217,6 +224,20 @@ CREATE TABLE `price_list_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `price_list_config` */
+
+/*Table structure for table `role` */
+
+DROP TABLE IF EXISTS `role`;
+
+CREATE TABLE `role` (
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(30) NOT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+/*Data for the table `role` */
+
+
 
 /*Table structure for table `special_discount` */
 
@@ -234,9 +255,29 @@ CREATE TABLE `special_discount` (
   PRIMARY KEY (`discount_id`),
   KEY `fk_special_discount_customers_info` (`customer_id`),
   CONSTRAINT `fk_special_discount_customers_info` FOREIGN KEY (`customer_id`) REFERENCES `customers_info` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 /*Data for the table `special_discount` */
+
+
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(30) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `fk_rolename_name` (`role_id`),
+  CONSTRAINT `fk_rolename_name` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+/*Data for the table `user` */
+
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

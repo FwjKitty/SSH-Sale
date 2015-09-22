@@ -1,14 +1,15 @@
-负责人：客户管理-梁妙思；价格管理-冯婉君；折扣管理-许凯迪
+负责人：
+客户管理-梁妙思；新增编辑查询客户表，财务确认，还差客户表查询权限。
+价格管理-冯婉君；新增编辑查询价格表配置，新增编辑查询导入价格表，还差导出和权限查询。
+折扣管理-许凯迪:功能全部实现，一般性折扣和一次性折扣的增删查改，还有折扣历史记录都已经完成，折扣的权限查询都完成。
 数据库账号：root
 数据库密码：111111
 
-完成度：
-折扣管理功能完全实现，
-价格管理还差exel的导入导出，
-客户暂时实现客户查询功能
+本项目执行步骤：
+1.建立数据库，数据库脚本为sale.sql
+2.数据库的user表一定要插入一条用户记录，才能登录本程序，还要确认本用户是业务员，业务经理或者财务人员
+3.进入程序，mvn clean：mvn compile：mvn tomcat：run
+4.打开浏览器，输入地址http://localhost:8080/SSH-Sale/login.jsp
 
-经常性折扣网址：http://localhost:8080/SaleImp/discount/showNormalDiscount.jsp
-一次性折扣网址：http://localhost:8080/SaleImp/discount/showOneDiscount.jsp
-价格表管理网址：http://localhost:8080/SaleImp/priceList/show.jsp
-价格表配置管理网址：http://localhost:8080/SaleImp/priceListConfig/show.jsp
-客户管理网址：http://localhost:8080/SaleImp/customer/customerlist.jsp
+
+
