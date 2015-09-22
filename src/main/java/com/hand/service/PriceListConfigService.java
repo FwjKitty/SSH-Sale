@@ -10,8 +10,8 @@ public interface PriceListConfigService {
 	List<PriceListConfig> getPriceListConfigsByPage(int pageSize, int pageRow);
 	List<PriceListConfig> getPriceListConfigs();
 	int getCount();
-	List<PriceListConfig> searchPriceListConfig(CustomersInfo customersInfo,
-			PriceListConfig priceListConfig,int pageSize,int pageNow);
-	int save(PriceListConfig priceListConfig);
+	List<PriceListConfig> searchPriceListConfig(CustomersInfo customersInfo,PriceListConfig priceListConfig);
+	int updateList(List<PriceListConfig> priceListConfigs);
+	int saveList(List<PriceListConfig> priceListConfigs);
 	List<CustomersInfo> getCustomerCodes();
 }

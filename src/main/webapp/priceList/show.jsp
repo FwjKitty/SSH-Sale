@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
 <%@ page isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -66,20 +65,17 @@
             <div class="panel-group" id="accordion2">
             <div class="panel-heading">
                 <strong style="font-size: 30px;">主数据维护</strong>
-            </div>
-                <div class="panel panel-default">
+            </div>     
+             <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
                         data-parent="#accordion2" href="#collapseOne">
-                        <a class="accordion-toggle">销售订单管理</a>
+                        <a class="accordion-toggle">首页</a>
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse "
                         style="height: auto;">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Java基础</a></li>
-                                <li><a href="#">Java面向对象</a></li>
-                                <li><a href="#">Java核心API</a></li>
-                                <li><a href="#">JavaEE</a></li>
+                     			<li><a href="<%=request.getContextPath()%>/user/userStatic.jsp">用户状态</a></li>
                             </ul>
                         </div>
                     </div>
@@ -87,26 +83,41 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
                         data-parent="#accordion2" href="#collapseTwo">
-                        <a class="accordion-toggle">发货单管理</a>
+                        <a class="accordion-toggle">销售订单管理</a>
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse "
                         style="height: auto;">
+                 <!--        <div class="panel-body">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="#">Java基础</a></li>
+                                <li><a href="#">Java面向对象</a></li>
+                                <li><a href="#">Java核心API</a></li>
+                                <li><a href="#">JavaEE</a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" data-toggle="collapse"
+                        data-parent="#accordion2" href="#collapseThree">
+                        <a class="accordion-toggle">用户管理</a>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse "
+                        style="height: auto;">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">SQL基础</a></li>
-                                <li><a href="#">Oracle</a></li>
-                                <li><a href="#">MySQL</a></li>
+                                <li><a href="<%=request.getContextPath()%>/user/showUser.jsp">用户管理</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
-                        data-parent="#accordion2" href="#collapseThree">
+                        data-parent="#accordion2" href="#collapseFour">
                         <a class="accordion-toggle">主数据维护</a>
                     </div>
                     
-                     <div id="collapseThree" class="panel-collapse collapse "
+                     <div id="collapseFour" class="panel-collapse collapse "
                         style="height: auto;">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
@@ -122,7 +133,7 @@
                                				</div>
                                			</div>
                                 <li><a href="<%=request.getContextPath()%>/customer/customerlist.jsp">客户管理</a></li>
-                                <li><a href="javascript:void(0)" onclick="getPriceListPage(1)">价格表管理</a></li>
+                                <li><a href="<%=request.getContextPath() %>/priceList_show.action">价格表管理</a></li>
                             </ul>
                         </div>
                      </div>
@@ -185,7 +196,7 @@
 							                <button type="button" class="btn" onclick="showSelectCustomerCode()">
 							                  	 新增
 							                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							                <button type="button" class="btn" onclick="savePriceLists()">
+							                <button type="button" class="btn" id="saveAndUpdatePriceLists">
 							                  	 保存
 							                </button>
 							            </div>
@@ -204,8 +215,8 @@
 							<div class="col-sm-12">
 								<hr style="border:3px solid #780000;">
 							</div>
+							
 							<div class="panel-body" id="priceListPanel">
-								<form id="saveForm" method="post">
 								<table class="table table-striped table-bordered table-hover well" style="text-align:center;">
 									<thead style="background-color:#1e90ff" id="pageHead">
 									</thead>
@@ -221,14 +232,12 @@
 										</tr>
 									</tfoot> --%>
 								</table>
-								</form>
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
-	</div>
 
 	<!-- modal for save -->
 	<div class="modal fade" id="selectCustomerCodeModal" tabindex="-1" role="dialog" aria-labelledby="selectCustomerCodeLabel" aria-hidden="true">

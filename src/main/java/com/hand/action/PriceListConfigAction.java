@@ -61,13 +61,12 @@ public class PriceListConfigAction extends ActionSupport {
 		}
 	}
 	public void search(){
-		List<PriceListConfig> priceListConfigs = priceListConfigService.searchPriceListConfig(customersInfo,priceListConfig,pageSize,pageNow);
 		JsonArray jsonArray = new JsonArray();
 		JsonObject jsonObject = null;
 		try {
+			List<PriceListConfig> priceListConfigs = priceListConfigService.searchPriceListConfig(customersInfo,priceListConfig);
 			for (int i = 0; i < priceListConfigs.size(); i++) {
 				jsonObject = new JsonObject();
-//				jsonObject.addProperty("number", i+1);
 				jsonObject.addProperty("priceListCol", priceListConfigs.get(i).getPriceListCol());
 				jsonObject.addProperty("displayName", priceListConfigs.get(i).getDisplayName());
 				jsonObject.addProperty("excelCol", priceListConfigs.get(i).getExcelCol().toString());
@@ -80,7 +79,7 @@ public class PriceListConfigAction extends ActionSupport {
 			response.setContentType("text/html;charset=utf-8");
 			this.setCount(priceListConfigService.getCount());
 			response.getWriter().write(jsonArray.toString());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -88,6 +87,23 @@ public class PriceListConfigAction extends ActionSupport {
 		if (customersInfo == null && priceListConfig == null){
 			addFieldError("msg","请输入查询内容");
       	}
+	}
+	
+	public void update(){
+		try{
+			int result = priceListConfigService.updateList(priceListConfigs);
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html;charset=utf-8");
+			String msg = "";
+			if(result == 1){
+				msg = "更新成功！";
+			}else{
+				msg = "更新数据失败，请重新操作！";
+			}
+			response.getWriter().write(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void showSelectCustomerCode(){
@@ -118,10 +134,21 @@ public class PriceListConfigAction extends ActionSupport {
 		}
 	}
 	
-	public String save(){
-		priceListConfigService.save(priceListConfig);
-		priceListConfig.setCustomersInfo(customersInfo);
-		return "success";
+	public void save(){
+		try{
+			int result = priceListConfigService.saveList(priceListConfigs);
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html;charset=utf-8");
+			String msg = "";
+			if(result == 1){
+				msg = "保存成功！";
+			}else{
+				msg = "保存数据失败，请重新操作！";
+			}
+			response.getWriter().write(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	public int getPageNow() {
 		return pageNow;

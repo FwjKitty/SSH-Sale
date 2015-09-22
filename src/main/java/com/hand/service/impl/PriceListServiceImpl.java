@@ -55,6 +55,9 @@ public class PriceListServiceImpl implements PriceListService {
 	public List<CustomersInfo> getCustomerCodes() {
 		return customersInfoDao.queryCustomerCodes();
 	}
+	public int updateList(List<PriceList> priceLists) {
+		return priceListDao.update(priceLists);
+	}
 	public int saveList(List<PriceList> priceLists) {
 		return priceListDao.save(priceLists);
 	}

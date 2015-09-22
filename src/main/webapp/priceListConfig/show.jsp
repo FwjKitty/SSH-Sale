@@ -15,6 +15,7 @@
 	<script src="<%=request.getContextPath() %>/js/jquery-2.1.1.min.js"></script>
 	<script src="<%=request.getContextPath() %>/js/jquery.cookie.js"></script>
 	<script src="<%=request.getContextPath() %>/js/bootstrap.min.js"></script>
+	<script src="<%=request.getContextPath() %>/js/jquery-form.js"></script>
 	<script src="<%=request.getContextPath() %>/js/priceListConfig.js"></script>
 <style type="text/css">
 @font-face {
@@ -65,20 +66,17 @@
             <div class="panel-group" id="accordion2">
             <div class="panel-heading">
                 <strong style="font-size: 30px;">主数据维护</strong>
-            </div>
-                <div class="panel panel-default">
+            </div>     
+             <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
                         data-parent="#accordion2" href="#collapseOne">
-                        <a class="accordion-toggle">销售订单管理</a>
+                        <a class="accordion-toggle">首页</a>
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse "
                         style="height: auto;">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Java基础</a></li>
-                                <li><a href="#">Java面向对象</a></li>
-                                <li><a href="#">Java核心API</a></li>
-                                <li><a href="#">JavaEE</a></li>
+                     			<li><a href="<%=request.getContextPath()%>/user/userStatic.jsp">用户状态</a></li>
                             </ul>
                         </div>
                     </div>
@@ -86,26 +84,41 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
                         data-parent="#accordion2" href="#collapseTwo">
-                        <a class="accordion-toggle">发货单管理</a>
+                        <a class="accordion-toggle">销售订单管理</a>
                     </div>
                     <div id="collapseTwo" class="panel-collapse collapse "
                         style="height: auto;">
+                 <!--        <div class="panel-body">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="#">Java基础</a></li>
+                                <li><a href="#">Java面向对象</a></li>
+                                <li><a href="#">Java核心API</a></li>
+                                <li><a href="#">JavaEE</a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" data-toggle="collapse"
+                        data-parent="#accordion2" href="#collapseThree">
+                        <a class="accordion-toggle">用户管理</a>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse "
+                        style="height: auto;">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">SQL基础</a></li>
-                                <li><a href="#">Oracle</a></li>
-                                <li><a href="#">MySQL</a></li>
+                                <li><a href="<%=request.getContextPath()%>/user/showUser.jsp">用户管理</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading" data-toggle="collapse"
-                        data-parent="#accordion2" href="#collapseThree">
+                        data-parent="#accordion2" href="#collapseFour">
                         <a class="accordion-toggle">主数据维护</a>
                     </div>
                     
-                     <div id="collapseThree" class="panel-collapse collapse "
+                     <div id="collapseFour" class="panel-collapse collapse "
                         style="height: auto;">
                         <div class="panel-body">
                             <ul class="nav nav-pills nav-stacked">
@@ -121,7 +134,7 @@
                                				</div>
                                			</div>
                                 <li><a href="<%=request.getContextPath()%>/customer/customerlist.jsp">客户管理</a></li>
-                                <li><a href="javascript:void(0)" onclick="getPriceListPage(1)">价格表管理</a></li>
+                                <li><a href="<%=request.getContextPath() %>/priceList_show.action">价格表管理</a></li>
                             </ul>
                         </div>
                      </div>
@@ -135,7 +148,7 @@
 	                    </div>
 	                    <div id="system_configuration" class="panel-collapse collapse "
 	                        style="height: auto;">
-	            	            <div class="panel-body">
+	                        <div class="panel-body">
 	                            <ul class="nav nav-pills nav-stacked">
 	                                <li><a href="#">Orderbase配置</a></li>
 	                                <li><a href="#">客户订单配置</a></li>
@@ -197,10 +210,10 @@
 							        </div>
 							        <div class="form-group">
 							            <div class="col-sm-offset-4 col-sm-3">
-							                <button type="button" class="btn" onclick="searchPriceListConfig(1)">
+							                <button type="button" class="btn" onclick="searchPriceListConfig()">
 							                   	查询/修改
 							                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							                <button type="submit" class="btn">
+							                <button type="button" class="btn" id="saveAndUpdate" onclick="savePriceListConfig()">
 							                   	保存
 							                </button>
 							            </div>
@@ -215,6 +228,7 @@
 							</div>
 							<div class="col-sm-12"><hr style="border:3px solid #780000;"></div>
 							<div class="panel-body form">
+								<form id="saveForm" method="post">
 								<table class="table table-bordered well" style="text-align:center;cellspacing:0;cellpadding:0;">
 									<thead style="background-color:#1e90ff">
 										<tr>
@@ -225,26 +239,13 @@
 											<th>启用</th>
 										</tr>
 									</thead>
-									<tbody id="pageBody">
-									<%-- <s:iterator value="#request.priceListConfigs" id="priceListConfig" status="i">
-										<tr>
-											<!-- 
-											<td><a href="<%=request.getContextPath() %>/PriceListConfig_edit.action?priceListConfig.priceListConfigId=${priceListConfig.priceListConfigId}">编辑</a> | <a href="<%=request.getContextPath() %>/PriceListConfig_del.action?priceListConfig.priceListConfigId=${priceListConfig.priceListConfigId}">删除</a></td>
-											 -->
-											<td><s:property value="#i.index"/></td>
-											<td><s:property value="#priceListConfig.priceListConfigId"/></td>
-											<td><s:property value="#priceListConfig.displayName"/></td>
-											<td><s:property value="#priceListConfig.excelCol"/></td>
-											<td><s:property value="#priceListConfig.activity"/></td>
-										</tr>
-									</s:iterator> --%>
-									</tbody>
-									<tfoot class="">
+									<tbody id="pageBody"></tbody>
+									<%-- <tfoot class="">
 										<tr>
 											<td colspan="5">
 											<div class="pull-left">${msg}</div>
 											<div class="pull-right" id="pageFooter">
-											<%-- <s:if test="pageNow+1-1==1">
+											<s:if test="pageNow+1-1==1">
 												<button onclick="getPage(1)" class="btn btn-default"><<</button>
 											</s:if>
 											<s:else>
@@ -253,11 +254,12 @@
 												<button onclick="getPage(1,)" class="btn btn-default">first</button>
 												<button onclick="getPage(${fn:substringBefore((count-count%10)/10+1, '.')})" class="btn btn-default">last</button>
 												<button onclick="getPage(${pageNow+1})" class="btn btn-default">>></button>
-											 --%></div>
+											</div>
 											</td>
 										</tr>
-									</tfoot>
+									</tfoot> --%>
 								</table>
+								</form>
 							</div>
 							<div class="panel-footer" style="text-align: center; height: 50px">
 								

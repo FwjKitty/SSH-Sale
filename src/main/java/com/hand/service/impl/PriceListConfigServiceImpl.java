@@ -30,19 +30,19 @@ public class PriceListConfigServiceImpl implements PriceListConfigService {
 	public int getCount() {
 		return priceListConfigDao.getCount();
 	}
-	public List<PriceListConfig> searchPriceListConfig(CustomersInfo customersInfo, PriceListConfig priceListConfig,int pageSize,int pageNow) {
+	public List<PriceListConfig> searchPriceListConfig(CustomersInfo customersInfo, PriceListConfig priceListConfig) {
 		List<Integer> customerIds = customersInfoDao.queryIdByCodeAndTypeAndName(customersInfo);
 		if(customerIds.size() > 0){
-			if(priceListConfig == null){
-				return priceListConfigDao.queryByCustomerId(customerIds, pageSize, pageNow);
-			}
-			return priceListConfigDao.queryByCustomerIdAndActivityAndExcelColAndDisplayName(customerIds, priceListConfig,pageSize,pageNow);
+			return priceListConfigDao.queryByCustomerIdAndActivityAndExcelColAndDisplayName(customerIds, priceListConfig);
 		}else{
-			return priceListConfigDao.queryByActivityAndExcelColAndDisplayName(priceListConfig,pageSize,pageNow);
+			return priceListConfigDao.queryByActivityAndExcelColAndDisplayName(priceListConfig);
 		}
 	}
-	public int save(PriceListConfig priceListConfig) {
-		return priceListConfigDao.save(priceListConfig);
+	public int updateList(List<PriceListConfig> priceListConfigs) {
+		return priceListConfigDao.update(priceListConfigs);
+	}
+	public int saveList(List<PriceListConfig> priceListConfigs) {
+		return priceListConfigDao.save(priceListConfigs);
 	}
 	public List<CustomersInfo> getCustomerCodes() {
 		return customersInfoDao.queryCustomerCodes();

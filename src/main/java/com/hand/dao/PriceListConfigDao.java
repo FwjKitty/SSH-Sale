@@ -12,13 +12,12 @@ public interface PriceListConfigDao {
 	List<PriceListConfig> queryByActivity(String activity);
 	List<PriceListConfig> queryByExcelCol(int excelCol);
 	List<PriceListConfig> queryByDisplayName(String displayName);
-	List<PriceListConfig> queryByActivityAndExcelColAndDisplayName(PriceListConfig priceListConfig,
-			int pageSize,int pageNow);
+	List<PriceListConfig> queryByActivityAndExcelColAndDisplayName(PriceListConfig priceListConfig);
 	List<PriceListConfig> queryByCustomerIdAndActivityAndExcelColAndDisplayName(
-			List<Integer> customerIds,PriceListConfig priceListConfig,int pageSize,int pageNow);
-	List<PriceListConfig> queryByCustomerId(
-			List<Integer> customerIds,int pageSize,int pageNow);
+			List<Integer> customerIds,PriceListConfig priceListConfig);
+	List<PriceListConfig> queryByCustomerId(List<Integer> customerIds);
 	List<PriceListConfig> queryByCustomerIdAndActivity(List<Integer> customerIds);
 	List<PriceListConfig> queryByCustomerIdAndActivity(int customerId);
-	int save(PriceListConfig priceListConfig);
+	int update(List<PriceListConfig> priceListConfigs);
+	int save(List<PriceListConfig> priceListConfigs);
 }

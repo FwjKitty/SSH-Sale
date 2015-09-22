@@ -1,6 +1,7 @@
 package com.hand.action;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,6 @@ import com.hand.model.PriceListConfig;
 import com.hand.service.PriceListService;
 import com.opensymphony.xwork2.ActionSupport;
 
-import net.sf.json.JSONArray;
-
 @Controller
 public class PriceListAction extends ActionSupport {
 
@@ -41,6 +40,7 @@ public class PriceListAction extends ActionSupport {
 	private File priceListFile;
 	private String priceListFileFileName;
 	private String priceListFileContentType;
+	private List<String> displayNames;
 	
 	public String show(){
 		//List<PriceList> priceList = priceListService.getPriceListByPage(pageSize,1);
@@ -78,7 +78,6 @@ public class PriceListAction extends ActionSupport {
 		try{
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html;charset=utf-8");
-			System.out.println(priceLists.toString());
 			response.getWriter().write(priceLists.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -126,16 +125,36 @@ public class PriceListAction extends ActionSupport {
 		}
 	}
 	
+	public void update(){
+		int result = priceListService.updateList(priceLists);
+		try{
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html;charset=utf-8");
+			String msg = "";
+			if(result == 1){
+				msg = "保存成功！";
+			}else{
+				msg = "保存数据失败，请重新操作！";
+			}
+			response.getWriter().write(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void save(){
 		int result = priceListService.saveList(priceLists);
 		try{
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html;charset=utf-8");
+			JsonObject jsonObject = new JsonObject();
 			if(result == 1){
-				response.getWriter().write("保存成功！");
+				jsonObject.addProperty("msg", "保存成功！");
 			}else{
-				response.getWriter().write("保存数据失败，请重新添加！");
+				jsonObject.addProperty("msg", "保存数据失败，请重新添加！");
 			}
+			jsonObject.addProperty("number", String.valueOf(priceLists.size()));
+			response.getWriter().write(jsonObject.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -144,6 +163,7 @@ public class PriceListAction extends ActionSupport {
 	public void importPriceListShow(){
 		List<PriceListConfig> priceListConfigs = priceListService.getHeader(customersInfo);
 		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("customersInfo.customerId", priceListConfigs.get(0).getCustomersInfo().getCustomerId());
 		for(int i=0; i<priceListConfigs.size(); i++){
 			jsonObject.addProperty(priceListConfigs.get(i).getPriceListCol(),priceListConfigs.get(i).getDisplayName());
 		}
@@ -189,6 +209,42 @@ public class PriceListAction extends ActionSupport {
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html;charset=utf-8");
 			response.getWriter().write(jsonArray.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void exportPriceList(){
+		//创建Excel工作簿
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		//创建一个工作表sheet
+		HSSFSheet sheet = workbook.createSheet();
+		//创建第一行
+		HSSFRow headRow = sheet.createRow(0);
+		HSSFCell cell = null;
+		PriceList priceList = null;
+		//插入第一行数据【表头】
+		for(int i=0; i<displayNames.size(); i++){
+			cell = headRow.createCell(i);
+			cell.setCellValue(displayNames.get(i));
+		}
+		//追加数据
+		for(int i=1; i<=priceLists.size(); i++){
+			priceList = priceLists.get(i-1);
+			HSSFRow nextRow = sheet.createRow(i);
+			for(int j=0; j<displayNames.size(); j++){
+				cell = nextRow.createCell(j);
+				cell.setCellValue(priceList.get);
+			}
+		}
+		//创建一个文件
+		File file = new File("template/poi_test.xls");
+		try {
+			file.createNewFile();
+			FileOutputStream stream = FileUtils.openOutputStream(file);
+			workbook.write(stream);
+			stream.close();
+			workbook.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -265,5 +321,11 @@ public class PriceListAction extends ActionSupport {
 	}
 	public void setPriceLists(List<PriceList> priceLists) {
 		this.priceLists = priceLists;
+	}
+	public List<String> getDisplayNames() {
+		return displayNames;
+	}
+	public void setDisplayNames(List<String> displayNames) {
+		this.displayNames = displayNames;
 	}
 }

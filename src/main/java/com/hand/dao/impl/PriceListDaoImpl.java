@@ -142,6 +142,22 @@ public class PriceListDaoImpl implements PriceListDao {
 		}
 		return jsonArray;
 	}
+	
+	public int update(List<PriceList> priceLists) {
+		Session session = sessionFactory.getCurrentSession();
+		//Transaction tx = session.getTransaction();
+		try{
+			for(PriceList priceList : priceLists){
+				session.update(priceList);
+				//tx.commit();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			//tx.rollback();
+			return 0;
+		}
+		return 1;
+	}
 
 	public int save(List<PriceList> priceLists) {
 		Session session = sessionFactory.getCurrentSession();

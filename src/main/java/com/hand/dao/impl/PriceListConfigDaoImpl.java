@@ -80,7 +80,7 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		return list;
 	}
 
-	public List<PriceListConfig> queryByActivityAndExcelColAndDisplayName(PriceListConfig priceListConfig,int pageSize,int pageNow) {
+	public List<PriceListConfig> queryByActivityAndExcelColAndDisplayName(PriceListConfig priceListConfig) {
 		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("from PriceListConfig where 1=1");
 		List<String> params1 = new ArrayList<String>();
@@ -108,8 +108,6 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 				query.setParameter(i, "%"+params2.get(i)+"%");
 				i++;
 			}
-			query.setMaxResults(pageSize);
-			query.setFirstResult((pageNow-1) * pageSize);
 			priceListConfigs = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,7 +115,7 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		return priceListConfigs;
 	}
 
-	public List<PriceListConfig> queryByCustomerIdAndActivityAndExcelColAndDisplayName(List<Integer> customerIds,PriceListConfig priceListConfig,int pageSize,int pageNow) {
+	public List<PriceListConfig> queryByCustomerIdAndActivityAndExcelColAndDisplayName(List<Integer> customerIds,PriceListConfig priceListConfig) {
 		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("from PriceListConfig where 1=1");
 		List<String> params1 = new ArrayList<String>();
@@ -147,8 +145,6 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 				i++;
 			}
 			query.setParameterList("customerIds", customerIds);
-			query.setMaxResults(pageSize);
-			query.setFirstResult((pageNow-1) * pageSize);
 			priceListConfigs = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,7 +152,7 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		return priceListConfigs;
 	}
 	
-	public List<PriceListConfig> queryByCustomerId(List<Integer> customerIds, int pageSize, int pageNow) {
+	public List<PriceListConfig> queryByCustomerId(List<Integer> customerIds) {
 		Session session = sessionFactory.getCurrentSession();
 		StringBuilder hql = new StringBuilder("from PriceListConfig where 1=1");
 		List<PriceListConfig> priceListConfigs = null;
@@ -164,8 +160,6 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		try {
 			Query query = session.createQuery(hql.toString());
 			query.setParameterList("customerIds", customerIds);
-			query.setMaxResults(pageSize);
-			query.setFirstResult((pageNow-1) * pageSize);
 			priceListConfigs = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -173,10 +167,39 @@ public class PriceListConfigDaoImpl implements PriceListConfigDao {
 		return priceListConfigs;
 	}
 
-	public int save(PriceListConfig priceListConfig) {
+	public int update(List<PriceListConfig> priceListConfigs) {
 		Session session = sessionFactory.getCurrentSession();
-		System.out.println((Integer) session.save(priceListConfig));
-		return (Integer) session.save(priceListConfig);
+		try{
+			for(PriceListConfig priceListConfig : priceListConfigs){
+				if(priceListConfig.getActivity() == null){
+					priceListConfig.setActivity("否");
+				}
+				session.update(priceListConfig);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
+	}
+	
+	public int save(List<PriceListConfig> priceListConfigs) {
+		Session session = sessionFactory.getCurrentSession();
+		try{
+			for(PriceListConfig priceListConfig : priceListConfigs){
+				if(priceListConfig.getDisplayName() != null && !priceListConfig.getDisplayName().trim().equals("")
+						&& priceListConfig.getExcelCol() != null && !String.valueOf(priceListConfig.getExcelCol()).trim().equals("")){
+					if(priceListConfig.getActivity() == null){
+						priceListConfig.setActivity("否");
+					}
+					session.save(priceListConfig);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
 	}
 
 	public List<PriceListConfig> queryByCustomerIdAndActivity(List<Integer> customerIds) {
