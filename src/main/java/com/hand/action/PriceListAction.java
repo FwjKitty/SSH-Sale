@@ -234,7 +234,7 @@ public class PriceListAction extends ActionSupport {
 			HSSFRow nextRow = sheet.createRow(i);
 			for(int j=0; j<displayNames.size(); j++){
 				cell = nextRow.createCell(j);
-				cell.setCellValue(priceList.get);
+				cell.setCellValue(priceList.getHy_item());
 			}
 		}
 		//创建一个文件

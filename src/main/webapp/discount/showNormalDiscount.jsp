@@ -345,7 +345,7 @@
                                				</div>
                                			</div>
                                 <li><a href="<%=request.getContextPath()%>/customer/customerlist.jsp">客户管理</a></li>
-                                <li><a href="javascript:void(0)" onclick="getPriceListPage(1)">价格表管理</a></li>
+                                <li><a href="<%=request.getContextPath() %>/priceList_show.action">价格表管理</a></li>
                             </ul>
                         </div>
                      </div>
