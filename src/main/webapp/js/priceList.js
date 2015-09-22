@@ -296,10 +296,10 @@ function uploadPriceListFile(){
     		var _tbody = "";
     		//遍历json数组
     		$.each(JSON.parse(priceLists),function(n, priceList){
-				_tbody += "<tr><td style='border:0 solid red;'>"+(n+1)+"<input type='text' name='priceLists["+n+"].customersInfo.customerId' value='"+$("#importCustomerId").val()+"'/></td>";
+				_tbody += "<tr><td style='border:0 solid red;'>"+(n+1)+"<input type='hidden' name='priceLists["+n+"].customersInfo.customerId' value='"+$("#importCustomerId").val()+"'/></td>";
 				var i = 0;
 				for(var columnName in priceList){
-					_tbody+="<td style='border:0 solid red;'>"+priceList[columnName]+"<input type='text' name='priceLists["+n+"]."+$("#priceListCol"+i).val()+"' value='"+priceList[columnName]+"'/></td>";
+					_tbody+="<td style='border:0 solid red;'>"+priceList[columnName]+"<input type='hidden' name='priceLists["+n+"]."+$("#priceListCol"+i).val()+"' value='"+priceList[columnName]+"'/></td>";
 					i++;
 				}
             	_tbody+="</tr>";
