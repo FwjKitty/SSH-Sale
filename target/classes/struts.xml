@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+
+	<package name="discountPackage" extends="struts-default">
+
+		<interceptors>
+			<interceptor name="CheckLoginInterceptor"
+				class="com.hand.interceptor.CheckLoginInterceptor">
+			</interceptor>
+			<interceptor-stack name="AllInterceptor">
+				<interceptor-ref name="CheckLoginInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="AllInterceptor"></default-interceptor-ref>
+		<global-results>
+			<result name="unLogin">/login.jsp</result>
+		</global-results>
+
+
+		<action name="*Action" class="com.hand.action.{1}Action"
+			method="{*}">
+			<result name="success">/user/userStatic.jsp</result>
+			<result name="error">/loginError.jsp</result>
+			<result name="oneDiscountSuccess">/discount/showOneDiscount.jsp</result>
+			<result name="nomalDiscountSuccess">/discount/showNormalDiscount.jsp</result>
+			<result name="out">/login.jsp</result>
+		</action>
+
+
+		<action name="priceListConfig_*" class="com.hand.action.PriceListConfigAction"
+			method="{1}">
+			<result>/priceListConfig/show.jsp</result>
+			<result name="success">/priceListConfig/show.jsp</result>
+		</action>
+		<action name="priceList_*" class="com.hand.action.PriceListAction"
+			method="{1}">
+			<result>/priceList/show.jsp</result>
+			<result name="success">/priceList/show.jsp</result>
+		</action>
+
+
+		<action name="CustomerListAction" class="com.hand.action.CustomerListAction">
+			<result>/customer/customerlist.jsp</result>
+			<result name="error">/customerlist.jsp</result>
+		</action>
+		<action name="CustomerAddAction" class="com.hand.action.CustomeraddAction">
+			<result name="success">/customer/customerlist.jsp</result>
+		</action>
+		<action name="CustomerDetailed" class="com.hand.action.CustomerDetailedAction">
+			<result name="success">/customer/customerDatialed.jsp</result>
+		</action>
+		<action name="CustomerUpdateDetailed" class="com.hand.action.CustomerDetailedAction">
+			<result name="success">/customer/customerUpdateDatialed.jsp</result>
+		</action>
+		<action name="ConfirmAction" class="com.hand.action.ConfirmAction">
+			<result name="success">/customer/customerlist.jsp</result>
+		</action>
+		<action name="UpdateAction" class="com.hand.action.UpdateAction">
+			<result name="success">/customer/customerlist.jsp</result>
+		</action>
+
+	</package>
+
+
+
+</struts>    
