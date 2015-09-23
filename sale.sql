@@ -165,7 +165,7 @@ DROP TABLE IF EXISTS `price_list`;
 CREATE TABLE `price_list` (
   `price_list_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) unsigned NOT NULL,
-  `type` varchar(8) NOT NULL,
+  `type` varchar(8),
   `hy_item` varchar(20) NOT NULL,
   `effective_date_from` date DEFAULT NULL,
   `effective_date_to` date DEFAULT NULL,
@@ -213,7 +213,7 @@ DROP TABLE IF EXISTS `price_list_config`;
 CREATE TABLE `price_list_config` (
   `price_list_config_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) unsigned NOT NULL,
-  `type` varchar(8) NOT NULL,
+  `type` varchar(8),
   `display_name` varchar(20) DEFAULT NULL,
   `price_list_col` varchar(30) NOT NULL,
   `excel_col` int(3) DEFAULT NULL,
