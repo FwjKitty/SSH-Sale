@@ -17,4 +17,5 @@ public interface PriceListDao {
 			List<PriceListConfig> priceListConfigs);
 	int update(List<PriceList> priceLists);
 	int save(List<PriceList> priceLists);
+	List<Object[]> queryByPriceListColAndPriceListId(String priceListCol,List<Integer> priceListIds);
 }

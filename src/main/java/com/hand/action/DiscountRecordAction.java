@@ -67,9 +67,7 @@ ModelDriven<DiscountAppliedRecords> {
 
 		}
 
-		@Override
 		public DiscountAppliedRecords getModel() {
-			// TODO Auto-generated method stub
 			return discountAppliedRecords;
 		}
 

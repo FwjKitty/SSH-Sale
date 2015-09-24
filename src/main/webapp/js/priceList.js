@@ -1,6 +1,6 @@
 function changePanel(){
 	$("#priceListPanel").text("");
-	var panel = "<form id='saveForm' method='post'>" +
+	var panel = "<form id='saveForm' method='post' action='priceList_exportPriceList.action'>" +
 			"<table class='table table-striped table-bordered table-hover well' style='text-align:center;'>" +
 			"<thead style='background-color:#1e90ff;' id='pageHead'></thead>" +
 			"<tbody id='pageBody'></tbody>" +
@@ -91,22 +91,31 @@ function searchPriceList() {
     		//遍历json数组
     		$.each(priceLists,function(n, priceList){
         		if(n == 0){
-    				_thead+="<tr><th>序号</th>";
+        			var i = 0;
+    				_thead+="<tr><th>序号<input type='hidden' name='displayNames["+i+"]' value='序号'/></th>";
     				for(var price in priceList){
+    					
     					if(price == "price_list_id" || price == "customersInfo.customerId"){
     						continue;
     					}else{
-    						_thead+="<th>"+priceList[price]+"</th>";
+    						i++;
+    						_thead+="<th>"+priceList[price]+"<input type='hidden' name='displayNames["+i+"]' value='"+priceList[price]+"'/></th>";
     					}
     	            }
     				_thead+="</tr>";
     			}else{
     				_tbody += "<tr><td style='background-color:#b0c4de;'>"+n+"</td>";
                 	for(var price in priceList){
-                		if(price == "price_list_id" || price == "customersInfo.customerId"){
+                		if(price == "price_list_id"){
+    						_tbody+="<input type='hidden' value='"+priceList[price]+"' name='priceLists["+(n-1)+"]."+price+"'/>" +
+    								"<input type='hidden' value='"+priceList[price]+"' name='priceListIds["+(n-1)+"]'/>";
+    					}else if(price == "customersInfo.customerId"){
     						_tbody+="<input type='hidden' value='"+priceList[price]+"' name='priceLists["+(n-1)+"]."+price+"'/>";
-    					}else{
-    						_tbody+="<td style='background-color:#f8f8ff;'><input type='text' value='"+priceList[price]+"' name='priceLists["+(n-1)+"]."+price+"' style='width:100%;'/></td>";
+						}else{
+    						_tbody+="<td style='background-color:#f8f8ff;'>" +
+    								"<input type='text' value='"+priceList[price]+"' name='priceLists["+(n-1)+"]."+price+"'/>" +
+    								"<input type='hidden' value='"+price+"' name='priceListCols["+(n-1)+"]'/>" +
+    								"</td>";
     					}
     	            }
                 	_tbody+="</tr>";
@@ -288,7 +297,6 @@ function uploadPriceListFile(){
 	$("#uploadPriceListFileForm").ajaxSubmit({
 		url : 'priceList_importPriceList.action',
         type : "post",
-//        data : {"priceListFile":$("#priceListFile").val()},
         datatype : "json",
         success:function(priceLists) {
     		var _tbody = "";
@@ -304,8 +312,7 @@ function uploadPriceListFile(){
     		});
     		$("#pageBody").append(_tbody);
          	$('#uploadMsg').html('已完成！');
-        }/*,
-        resetForm:true*/
+        }
 	});
 }
 
@@ -316,13 +323,9 @@ function saveImportPriceLists(){
 	$("#saveForm").ajaxSubmit({
 		url : 'priceList_save.action',
         type : "post",
-//	        data : {"priceListFile":$("#priceListFile").val()},
         datatype : "json",
-        error:function(data,status){
-        	alert(JSON.parse(data));
-        	alert("error");
-        },
         success:function(result) {
+        	alert(result);
         	data = JSON.parse(result);
         	if(data["msg"] == "保存成功！"){
         		$("#priceListsMsg").text("导入"+data["number"]+"条记录，成功"+data["number"]+"条，错误"+0+"条");
@@ -332,4 +335,11 @@ function saveImportPriceLists(){
         	}
         }
 	});
+}
+
+/**
+ * 导出价格表
+ */
+function exportPriceLists(){
+	$("#saveForm").submit();
 }

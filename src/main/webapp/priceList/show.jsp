@@ -199,7 +199,7 @@
 							                </button>
 							            </div>
 							            <div class="col-sm-offset-1 col-sm-3">
-							                <button type="button" class="btn" id="exportPriceList">
+							                <button type="button" class="btn" onclick="exportPriceLists()">
 							                   	导出Excel
 							                </button>
 							                <button type="button" class="btn" onclick="showImportPriceList()">

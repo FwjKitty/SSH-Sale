@@ -57,9 +57,7 @@ public class ShowCustomerCodeAction extends ActionSupport implements
 
 	}
 
-	@Override
 	public CustomersInfo getModel() {
-		// TODO Auto-generated method stub
 		return customersInfo;
 	}
 

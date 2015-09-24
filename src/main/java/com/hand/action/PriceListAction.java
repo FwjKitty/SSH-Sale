@@ -1,7 +1,14 @@
 package com.hand.action;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +21,16 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.stereotype.Controller;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import com.hand.model.CustomersInfo;
 import com.hand.model.PriceList;
 import com.hand.model.PriceListConfig;
@@ -41,6 +53,9 @@ public class PriceListAction extends ActionSupport {
 	private File priceListFile;
 	private String priceListFileFileName;
 	private String priceListFileContentType;
+	List<String> displayNames;
+	List<String> priceListCols;
+	List<Integer> priceListIds;
 	
 	public String show(){
 		//List<PriceList> priceList = priceListService.getPriceListByPage(pageSize,1);
@@ -56,7 +71,6 @@ public class PriceListAction extends ActionSupport {
 		try {
 			for (int i = 0; i < priceList.size(); i++) {
 				jsonObject = new JsonObject();
-//				jsonObject.addProperty("number", i+1);
 				jsonObject.addProperty("priceListId", priceList.get(i).getPrice_list_id());
 				jsonObject.addProperty("hyItem", priceList.get(i).getHy_item());
 				jsonObject.addProperty("effectiveDateFrom", priceList.get(i).getEffective_date_from().toString());
@@ -143,8 +157,8 @@ public class PriceListAction extends ActionSupport {
 	}
 	
 	public void save(){
-		int result = priceListService.saveList(priceLists);
 		try{
+			int result = priceListService.saveList(priceLists);
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("text/html;charset=utf-8");
 			JsonObject jsonObject = new JsonObject();
@@ -155,7 +169,7 @@ public class PriceListAction extends ActionSupport {
 			}
 			jsonObject.addProperty("number", String.valueOf(priceLists.size()));
 			response.getWriter().write(jsonObject.toString());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -210,6 +224,74 @@ public class PriceListAction extends ActionSupport {
 			response.setContentType("text/html;charset=utf-8");
 			response.getWriter().write(jsonArray.toString());
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void exportPriceList(){
+		try {
+			//创建Excel工作簿
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			//创建一个工作表sheet
+			XSSFSheet sheet = workbook.createSheet();
+			//创建第一行【表头】
+			Row headRow = sheet.createRow(0);
+			Cell cell = null;
+			//插入第一行数据【表头】
+			for(int i=0; i<displayNames.size(); i++){
+				cell = headRow.createCell(i);
+				cell.setCellValue(displayNames.get(i));
+			}
+			//追加数据
+			List<Object[]> list = priceListService.getExportPriceList(priceListCols.get(0), priceListIds);
+			String cellValue = null;
+			
+			for(int i=1; i<=priceListIds.size(); i++){
+				Row nextRow = sheet.createRow(i);
+				Object[] obj = list.get(i-1);
+				for(int j=0; j<displayNames.size(); j++){
+					cell = nextRow.createCell(j);
+					if(j == 0){
+						cell.setCellValue(i);
+					}else{
+						cell.setCellValue(obj[j-1].toString());
+					}
+				}
+			}
+			
+			//创建一个文件并response
+			String temPath = "E:\\template\\";
+			File file = new File(temPath+"temFile.xlsx");
+			file.createNewFile();
+			FileOutputStream stream = FileUtils.openOutputStream(file);
+			workbook.write(stream);
+			stream.close();
+			workbook.close();
+			
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("application/x-download;charset=UTF-8");
+		    response.setHeader("Content-Disposition","attachment;filename=\"" + URLEncoder.encode("价格表.xlsx", "UTF-8") + "\"");
+		    response.setContentLength(Integer.valueOf(((Long)file.length()).toString()));
+			//输入流 读取目标文件
+			FileInputStream fis=new FileInputStream(file);
+			int len=-1;
+			byte[] data=new byte[1024];
+			ByteArrayOutputStream bos=new ByteArrayOutputStream(1024);
+			//文件读到最末尾 返回-1
+			while((len=fis.read(data))!=-1){
+				//将服务器中的数据 转换成二进制数组 放入内存中
+				bos.write(data,0,len);
+			}
+			//将服务器上的文件转换成二进制数组
+			OutputStream out = new BufferedOutputStream(response.getOutputStream());
+			//从服务器拿到数据向客户端写入
+			out.write(bos.toByteArray());
+			//清空内存文件
+			out.flush();
+			//关闭输出流、输入流
+			out.close();
+			fis.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -285,5 +367,23 @@ public class PriceListAction extends ActionSupport {
 	}
 	public void setPriceLists(List<PriceList> priceLists) {
 		this.priceLists = priceLists;
+	}
+	public List<String> getDisplayNames() {
+		return displayNames;
+	}
+	public void setDisplayNames(List<String> displayNames) {
+		this.displayNames = displayNames;
+	}
+	public List<String> getPriceListCols() {
+		return priceListCols;
+	}
+	public void setPriceListCols(List<String> priceListCols) {
+		this.priceListCols = priceListCols;
+	}
+	public List<Integer> getPriceListIds() {
+		return priceListIds;
+	}
+	public void setPriceListIds(List<Integer> priceListIds) {
+		this.priceListIds = priceListIds;
 	}
 }

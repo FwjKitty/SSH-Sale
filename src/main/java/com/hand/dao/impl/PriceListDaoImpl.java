@@ -174,4 +174,20 @@ public class PriceListDaoImpl implements PriceListDao {
 		}
 		return 1;
 	}
+
+	public List<Object[]> queryByPriceListColAndPriceListId(String priceListCol,
+			List<Integer> priceListIds) {
+		List<Object[]> list = null;
+		try{
+			Session session = sessionFactory.getCurrentSession();
+			Query query = session.createSQLQuery("select "+priceListCol+" from price_list where price_list_id in (:priceListIds)");
+			query.setParameterList("priceListIds", priceListIds);
+			JsonArray jsonArray = new JsonArray();
+			JsonObject jsonObject = new JsonObject();
+			list = query.list();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

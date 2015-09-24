@@ -18,4 +18,5 @@ public interface PriceListService {
 	List<CustomersInfo> getCustomerCodes();
 	int updateList(List<PriceList> priceLists);
 	int saveList(List<PriceList> priceLists);
+	List<Object[]> getExportPriceList(String priceListCol,List<Integer> priceListIds);
 }

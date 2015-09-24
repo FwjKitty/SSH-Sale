@@ -61,4 +61,7 @@ public class PriceListServiceImpl implements PriceListService {
 	public int saveList(List<PriceList> priceLists) {
 		return priceListDao.save(priceLists);
 	}
+	public List<Object[]> getExportPriceList(String priceListCol, List<Integer> priceListIds) {
+		return priceListDao.queryByPriceListColAndPriceListId(priceListCol, priceListIds);
+	}
 }
